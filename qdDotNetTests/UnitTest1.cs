@@ -23,7 +23,7 @@ namespace qdDotNetTests
 
 			PointInt position = new PointInt(0, 0);
 
-			fGenerator.FillXCounts(position, ref counts, ref doneFlags, ref zValues);
+			fGenerator.FillCounts(position, ref counts, ref doneFlags, ref zValues);
 		}
 
 		[TestMethod]
