@@ -131,7 +131,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Dd.h" />
-    <ClInclude Include="DdFractalFunctions.h" />
     <ClInclude Include="FCoordsMath.h" />
     <ClInclude Include="FGenerator.h" />
     <ClInclude Include="FGenJob.h" />
@@ -151,7 +150,6 @@
     <ClCompile Include="FCoordsMath.cpp" />
     <ClCompile Include="FGenerator.cpp" />
     <ClCompile Include="FGenJob.cpp" />
-    <ClCompile Include="DdFractalFunctions.cpp" />
     <ClCompile Include="MCoordsDd.cpp" />
     <ClCompile Include="PointDd.cpp" />
     <ClCompile Include="PointInt.cpp" />
@@ -178,9 +176,6 @@
   <ItemGroup>
     <ProjectReference Include="..\FGen\FGen.vcxproj">
       <Project>{ebe5c7e0-18e0-4db8-a61c-966e3def7379}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\qd\qd.vcxproj">
-      <Project>{06d738a5-a774-4e1c-9a11-2bc39b55bfac}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

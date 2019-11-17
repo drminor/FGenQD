@@ -33,9 +33,6 @@
     <ClInclude Include="Dd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DdFractalFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FGenJob.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DdFractalFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FGenerator.cpp">

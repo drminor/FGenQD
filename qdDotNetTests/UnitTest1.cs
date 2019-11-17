@@ -26,24 +26,24 @@ namespace qdDotNetTests
 			fGenerator.FillCounts(position, ref counts, ref doneFlags, ref zValues);
 		}
 
-		[TestMethod]
-		public void TestMethod1()
-		{
-			DdFractalFunctions ddFractalFunctions = new DdFractalFunctions();
+		//[TestMethod]
+		//public void TestMethod1()
+		//{
+		//	DdFractalFunctions ddFractalFunctions = new DdFractalFunctions();
 
-			UInt32 mre = ddFractalFunctions.testMulDiv22();
-			System.Diagnostics.Debug.WriteLine($"Mre = {mre}.");
+		//	UInt32 mre = ddFractalFunctions.testMulDiv22();
+		//	System.Diagnostics.Debug.WriteLine($"Mre = {mre}.");
 
-			Dd ddRealVal = ddFractalFunctions.add(1.1, 2.2);
-			double hi = ddRealVal.hi;
+		//	Dd ddRealVal = ddFractalFunctions.add(1.1, 2.2);
+		//	double hi = ddRealVal.hi;
 
-			Dd a = ddFractalFunctions.parse("1.01234567890123456789012345674337250E-5");
+		//	Dd a = ddFractalFunctions.parse("1.01234567890123456789012345674337250E-5");
 
-			string digits = ddFractalFunctions.getDigits(a);
-			System.Diagnostics.Debug.WriteLine($"A = {digits}; Hi = {a.hi}; Lo = {a.lo}.");
+		//	string digits = ddFractalFunctions.getDigits(a);
+		//	System.Diagnostics.Debug.WriteLine($"A = {digits}; Hi = {a.hi}; Lo = {a.lo}.");
 
-			Dd[] samplePoints = ddFractalFunctions.getSamplePoints(ddRealVal, ddRealVal, 100);
-		}
+		//	Dd[] samplePoints = ddFractalFunctions.getSamplePoints(ddRealVal, ddRealVal, 100);
+		//}
 
 		[TestMethod]
 		public void TestCreateJob()

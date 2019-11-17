@@ -12,18 +12,18 @@ namespace TestQdDotNet
 	{
 		static void Main(string[] args)
 		{
-			DdFractalFunctions ddFractalFunctions = new DdFractalFunctions();
+			//DdFractalFunctions ddFractalFunctions = new DdFractalFunctions();
 
-			//Dd ddRealVal = ddFractalFunctions.add(1.1, 2.2);
-			//double hi = ddRealVal.hi;
+			////Dd ddRealVal = ddFractalFunctions.add(1.1, 2.2);
+			////double hi = ddRealVal.hi;
 
-			Dd a = ddFractalFunctions.parse("1.01234567890123456789012345674337250E-5");
+			//Dd a = ddFractalFunctions.parse("1.01234567890123456789012345674337250E-5");
 
-			string digits = ddFractalFunctions.getDigits(a);
-			Console.WriteLine($"A = {digits}; Hi = {a.hi}; Lo = {a.lo}.");
-			//Dd[] samplePoints = ddFractalFunctions.getSamplePoints(ddRealVal, ddRealVal, 100);
+			//string digits = ddFractalFunctions.getDigits(a);
+			//Console.WriteLine($"A = {digits}; Hi = {a.hi}; Lo = {a.lo}.");
+			////Dd[] samplePoints = ddFractalFunctions.getSamplePoints(ddRealVal, ddRealVal, 100);
 
-			Console.WriteLine("Ran to end.");
+			//Console.WriteLine("Ran to end.");
 
 		}
 	}
