@@ -1,15 +1,21 @@
 #pragma once
 
-#include <qd/dd_real.h>
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
+
+//#include <qd/dd_real.h>
+
 #include "CoordsDd.h"
-#include "PointDd.h"
 #include "SizeInt.h"
-#include "PointInt.h"
 #include "RectangleInt.h"
+
 
 namespace FGen
 {
-	class CoordsMath
+	class FGEN_API CoordsMath
 	{
 	public:
 
@@ -24,7 +30,7 @@ namespace FGen
 		~CoordsMath();
 
 	private:
-		dd_real GetNewCoord(dd_real vSt, int avStart, dd_real extentY, int h);
+		qp GetNewCoord(qp vSt, int avStart, qp extentY, int h);
 	};
 }
 

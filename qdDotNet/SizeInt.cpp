@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "SizeInt.h"
 
 namespace qdDotNet

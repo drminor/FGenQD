@@ -1,5 +1,6 @@
 #include "stdafx.h"
-#include "SizeInt.h"
+#include "FGen.h"
+
 
 namespace FGen
 {

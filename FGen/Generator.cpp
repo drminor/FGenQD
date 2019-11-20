@@ -1,6 +1,10 @@
 #include "stdafx.h"
 
-#include "Generator.h"
+#include "FGen.h"
+
+#include <iostream>
+//#include <limits>
+//#include <string>
 
 namespace FGen
 {
@@ -25,9 +29,9 @@ namespace FGen
 
 		int rPtr = 0;
 		for (int j = 0; j < ySamples; j++) {
-			dd_real yCord = m_YPoints[j];
+			qp yCord = m_YPoints[j];
 			for (int i = 0; i < xSamples; i++) {
-				dd_real xCord = m_XPoints[i];
+				qp xCord = m_XPoints[i];
 				PointDd c = PointDd(xCord, yCord);
 				//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
 				bool done = false;
@@ -49,9 +53,9 @@ namespace FGen
 		int xSamples = m_Job.SamplePoints().W();
 		result.reserve(xSamples);
 
-		dd_real yCord = m_YPoints[yPtr];
+		qp yCord = m_YPoints[yPtr];
 		for (int i = 0; i < xSamples; i++) {
-			dd_real xCord = m_XPoints[i];
+			qp xCord = m_XPoints[i];
 			PointDd c = PointDd(xCord, yCord);
 			bool done = false;
 			PointDd z = PointDd(0, 0);
@@ -71,10 +75,10 @@ namespace FGen
 		int resultPtr = 0;
 		for (int j = 0; j < FGen::BLOCK_HEIGHT; j++) {
 			
-			dd_real yCord = m_YPoints[startY + j];
+			qp yCord = m_YPoints[startY + j];
 
 			for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-				dd_real xCord = m_XPoints[startX + i];
+				qp xCord = m_XPoints[startX + i];
 				PointDd c = PointDd(xCord, yCord);
 
 				PointDd z = GetPointDd(&zValues[resultPtr * 4]);
@@ -93,10 +97,10 @@ namespace FGen
 
 		int resultPtr = yPtr * BLOCK_WIDTH;
 
-		dd_real yCord = m_YPoints[startY + yPtr];
+		qp yCord = m_YPoints[startY + yPtr];
 
 		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-			dd_real xCord = m_XPoints[startX + i];
+			qp xCord = m_XPoints[startX + i];
 			PointDd c = PointDd(xCord, yCord);
 
 			PointDd z = GetPointDd(&zValues[resultPtr * 4]);
@@ -109,17 +113,17 @@ namespace FGen
 
 	void Generator::FillXCounts2(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
 	{
-		dd_real xSquared = dd_real(0);
-		dd_real ySquared = dd_real(0);
+		qp xSquared = qp(0);
+		qp ySquared = qp(0);
 		int startX = pos.X() * BLOCK_WIDTH;
 		int startY = pos.Y() * BLOCK_HEIGHT;
 
 		int resultPtr = yPtr * BLOCK_WIDTH;
 
-		dd_real yCord = m_YPoints[startY + yPtr];
+		qp yCord = m_YPoints[startY + yPtr];
 
 		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-			dd_real xCord = m_XPoints[startX + i];
+			qp xCord = m_XPoints[startX + i];
 			counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
 			resultPtr++;
 		}
@@ -132,10 +136,10 @@ namespace FGen
 
 		int resultPtr = yPtr * BLOCK_WIDTH;
 
-		dd_real yCord = m_YPoints[startY + yPtr];
+		qp yCord = m_YPoints[startY + yPtr];
 
 		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-			dd_real xCord = m_XPoints[startX + i];
+			qp xCord = m_XPoints[startX + i];
 			PointDd c = PointDd(xCord, yCord);
 
 			PointDd z = GetPointDd(&zValues[resultPtr * 4]);
@@ -153,7 +157,7 @@ namespace FGen
 		double yHi = zValues[2];
 		double yLo = zValues[3];
 
-		return PointDd(dd_real(xHi, xLo), dd_real(yHi, yLo));
+		return PointDd(qp(xHi, xLo), qp(yHi, yLo));
 	}
 
 	void Generator::PointDdToDoubleArray(PointDd z, double * zValues) {
@@ -165,14 +169,14 @@ namespace FGen
 
 	unsigned int Generator::GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal) {
 
-		dd_real cX = c.X();
-		dd_real cY = c.Y();
+		qp cX = c.X();
+		qp cY = c.Y();
 
-		dd_real zX = curVal->X();
-		dd_real zY = curVal->Y();
+		qp zX = curVal->X();
+		qp zY = curVal->Y();
 
-		dd_real xSquared = dd_real();
-		dd_real ySquared = dd_real();
+		qp xSquared = qp();
+		qp ySquared = qp();
 
 		double escapeVel = 0;
 		//unsigned int cntr;
@@ -199,10 +203,10 @@ namespace FGen
 		return int(both);
 	}
 
-	unsigned int Generator::GetCount2(dd_real cX, dd_real cY, double * curZ, unsigned int cntr, bool * done, dd_real xSquared, dd_real ySquared)
+	unsigned int Generator::GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared)
 	{
-		dd_real zX = dd_real(curZ[0], curZ[1]);
-		dd_real zY = dd_real(curZ[2], curZ[3]);
+		qp zX = qp(curZ[0], curZ[1]);
+		qp zY = qp(curZ[2], curZ[3]);
 
 		xSquared.resetToZero();
 		ySquared.resetToZero();
@@ -265,7 +269,7 @@ namespace FGen
 	//	return escapeVelocity;
 	//}
 
-	double Generator::GetEscapeVelocity(dd_real cX, dd_real cY, dd_real zX, dd_real zY, dd_real xSquared, dd_real ySquared) {
+	double Generator::GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared) {
 
 		int cntr;
 		for (cntr = 0; cntr < 2; cntr++) {
@@ -275,7 +279,7 @@ namespace FGen
 			ySquared = zY * zY;
 		}
 
-		dd_real ev = xSquared + ySquared;
+		qp ev = xSquared + ySquared;
 		double evd = ev.toDouble();
 
 		double modulus = std::log10(evd) / 2;
@@ -305,9 +309,9 @@ namespace FGen
 
 		int rPtr = 0;
 		for (int j = 0; j < ySamples; j++) {
-			dd_real yCord = m_YPoints[j];
+			qp yCord = m_YPoints[j];
 			for (int i = 0; i < xSamples; i++) {
-				dd_real xCord = m_XPoints[i];
+				qp xCord = m_XPoints[i];
 				PointDd c = PointDd(xCord, yCord);
 				//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
 				result.push_back(Generator::GetCountF(c, m_targetIterationCount));
@@ -326,9 +330,9 @@ namespace FGen
 		int xSamples = m_Job.SamplePoints().W();
 		result.reserve(xSamples);
 
-		dd_real yCord = m_YPoints[yPtr];
+		qp yCord = m_YPoints[yPtr];
 		for (int i = 0; i < xSamples; i++) {
-			dd_real xCord = m_XPoints[i];
+			qp xCord = m_XPoints[i];
 			PointDd c = PointDd(xCord, yCord);
 			result.push_back(Generator::GetCountF(c, m_targetIterationCount));
 		}
@@ -340,14 +344,14 @@ namespace FGen
 
 	float Generator::GetCountF(PointDd c, int maxIterations) {
 
-		dd_real cX = c.X();
-		dd_real cY = c.Y();
+		qp cX = c.X();
+		qp cY = c.Y();
 
-		dd_real zX = dd_real();
-		dd_real zY = dd_real();
+		qp zX = qp();
+		qp zY = qp();
 
-		dd_real xSquared = dd_real();
-		dd_real ySquared = dd_real();
+		qp xSquared = qp();
+		qp ySquared = qp();
 		int cntr;
 		for (cntr = 0; cntr < maxIterations; cntr++) {
 			zY = 2 * zX * zY + cY;
@@ -365,53 +369,86 @@ namespace FGen
 		return result;
 	}
 
-	dd_real* Generator::GetXPoints()
+	qp* Generator::GetXPoints()
 	{
 		int xSamples = m_Job.SamplePoints().W();
 		int areaXSampleCnt = m_Job.Area().W() * BLOCK_WIDTH;
 
-		dd_real* result = new dd_real[areaXSampleCnt];
+		//qp* result = new qp[areaXSampleCnt];
 
-		dd_real startC = m_Job.Start().X();
-		dd_real diff = m_Job.End().X() - startC;
+		qp startC = m_Job.Start().X();
+		//qp diff = m_Job.End().X() - startC;
+		qp endC = m_Job.End().X();
 
 		int start = m_Job.Area().SX() * BLOCK_WIDTH;
 		int end = start + areaXSampleCnt;
 
-		int rPtr = 0;
-		for (int i = start; i < end; i++)
-		{
-			double rat = (double)i / (double)xSamples;
-			dd_real s = rat * diff;
-			result[rPtr++] = startC + s;
-		}
+		qp* result = GetPoints(xSamples, areaXSampleCnt, start, end, startC, endC);
+
+		//int rPtr = 0;
+		//for (int i = start; i < end; i++)
+		//{
+		//	double rat = (double)i / (double)xSamples;
+		//	qp s = rat * diff;
+		//	result[rPtr++] = startC + s;
+		//}
 
 		return result;
 	}
 
-	dd_real* Generator::GetYPoints()
+	qp* Generator::GetYPoints()
 	{
 		int ySamples = m_Job.SamplePoints().H();
 		int areaYSampleCnt = m_Job.Area().H() * BLOCK_HEIGHT;
 
-		dd_real* result = new dd_real[ySamples];
+		//qp* result = new qp[ySamples];
 
-		dd_real startC = m_Job.End().Y();
-		dd_real diff = m_Job.Start().Y() - startC;
+		qp startC = m_Job.End().Y();
+		//qp diff = m_Job.Start().Y() - startC;
+		qp endC = m_Job.Start().Y();
 
 		int start = m_Job.Area().SY() * BLOCK_HEIGHT;
 		int end = start + areaYSampleCnt;
 
+		qp* result = GetPoints(ySamples, areaYSampleCnt, start, end, startC, endC);
+
+		//int rPtr = 0;
+		//for (int i = start; i < end; i++)
+		//{
+		//	double rat = (double)i / (double)ySamples;
+		//	qp s = rat * diff;
+		//	result[rPtr++] = startC + s;
+		//}
+
+		return result;
+	}
+
+	qp* Generator::GetPoints(int sampleCnt, int width, int areaStart, int areaEnd, qp startC, qp endC)
+	{
+		//int ySamples = m_Job.SamplePoints().H();
+		//int areaYSampleCnt = m_Job.Area().H() * BLOCK_HEIGHT;
+
+		qp* result = new qp[sampleCnt];
+
+		//qp startC = m_Job.End().Y();
+		//qp diff = m_Job.Start().Y() - startC;
+		qp diff = endC - startC;
+
+
+		//int start = m_Job.Area().SY() * BLOCK_HEIGHT;
+		//int end = start + width;
+
 		int rPtr = 0;
-		for (int i = start; i < end; i++)
+		for (int i = areaStart; i < areaEnd; i++)
 		{
-			double rat = (double)i / (double)ySamples;
-			dd_real s = rat * diff;
+			double rat = (double)i / (double)sampleCnt;
+			qp s = rat * diff;
 			result[rPtr++] = startC + s;
 		}
 
 		return result;
 	}
+
 
 	Generator::~Generator()
 	{

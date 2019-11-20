@@ -1,8 +1,14 @@
 #pragma once
 
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
+
 namespace FGen
 {
-	struct PointInt
+	struct FGEN_API PointInt
 	{
 
 	public:

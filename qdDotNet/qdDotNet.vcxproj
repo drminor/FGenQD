@@ -47,6 +47,7 @@
     <PlatformToolset>v141</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
+    <UseIntelMKL>Sequential</UseIntelMKL>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -134,7 +135,6 @@
     <ClInclude Include="FCoordsMath.h" />
     <ClInclude Include="FGenerator.h" />
     <ClInclude Include="FGenJob.h" />
-    <ClInclude Include="ManagedObject.h" />
     <ClInclude Include="MCoordsDd.h" />
     <ClInclude Include="PointDd.h" />
     <ClInclude Include="PointInt.h" />

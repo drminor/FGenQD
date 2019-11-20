@@ -1,9 +1,10 @@
 #include "stdafx.h"
-#include "PointDd.h"
+#include "FGen.h"
+
 
 namespace FGen
 {
-	PointDd::PointDd(dd_real x, dd_real y) : x(x), y(y)
+	PointDd::PointDd(qp x, qp y) : x(x), y(y)
 	{
 	}
 

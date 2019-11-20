@@ -1,11 +1,19 @@
 #pragma once
 
-#include <qd/dd_real.h>
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
+
+//#include <qd/dd_real.h>
+
+#include "qp.h"
 #include "PointDd.h"
 
 namespace FGen
 {
-	struct CoordsDd
+	struct FGEN_API CoordsDd
 	{
 	public:
 
@@ -22,34 +30,39 @@ namespace FGen
 			return end;
 		};
 
-		inline dd_real SX() const
+		inline qp SX() const
 		{
 			return start.X();
 		};
 
-		inline dd_real EX() const
+		inline qp EX() const
 		{
 			return end.X();
 		};
 
-		inline dd_real SY() const
+		inline qp SY() const
 		{
 			return start.Y();
 		};
 
-		inline dd_real EY() const
+		inline qp EY() const
 		{
 			return end.Y();
 		};
 
-		inline dd_real Width() const
+		inline qp Width() const
 		{
-			return end.X() - start.X();
+			//TODO: Fix qp substraction
+			//return end.X() - start.X();
+			return qp(end.X()._hi() - start.X()._hi());
 		};
 
-		inline dd_real Height() const
+		inline qp Height() const
 		{
-			return end.Y() - start.Y();
+			//TODO: Fix qp substraction
+			//return end.Y() - start.Y();
+			return qp(end.Y()._hi() - start.Y()._hi());
+
 		};
 
 

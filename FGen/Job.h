@@ -1,12 +1,15 @@
 #pragma once
-#include <qd/dd_real.h>
+//#include <qd/dd_real.h>
 
-#include "PointDd.h"
-#include "RectangleInt.h"
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
 
 namespace FGen
 {
-	class Job
+	class FGEN_API Job
 	{
 	public:
 

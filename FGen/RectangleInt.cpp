@@ -1,8 +1,6 @@
 #include "stdafx.h"
-#include "RectangleInt.h"
+#include "FGen.h"
 
-#include "PointInt.h"
-#include "SizeInt.h"
 
 namespace FGen
 {

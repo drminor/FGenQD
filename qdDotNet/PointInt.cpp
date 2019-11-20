@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PointInt.h"
 
 namespace qdDotNet

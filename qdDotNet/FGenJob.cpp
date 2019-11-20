@@ -1,3 +1,5 @@
+
+#include "stdafx.h"
 #include "FGenJob.h"
 #include "../FGen/FGen.h"
 

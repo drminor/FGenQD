@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "CoordsDd.h"
-#include "PointDd.h"
+#include "FGen.h"
+
 
 namespace FGen
 {

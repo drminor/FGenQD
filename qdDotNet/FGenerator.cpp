@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FGenerator.h"
 #include "../FGen/FGen.h"
 #include "FGenJob.h"
@@ -9,8 +10,8 @@ namespace qdDotNet
 	{
 		FGen::Job* nJob = (new FGen::Job(
 			job->JobId,
-			FGen::PointDd(job->Start.X().ToDdReal(), job->Start.Y().ToDdReal()),
-			FGen::PointDd(job->End.X().ToDdReal(), job->End.Y().ToDdReal()),
+			FGen::PointDd(job->Start.X().ToQp(), job->Start.Y().ToQp()),
+			FGen::PointDd(job->End.X().ToQp(), job->End.Y().ToQp()),
 			FGen::SizeInt(job->SamplePoints.W(), job->SamplePoints.H()),
 			job->MaxIterations,
 			FGen::RectangleInt(job->Area.X(), job->Area.Y(), job->Area.W(), job->Area.H())

@@ -1,8 +1,10 @@
 #pragma once
 
-#include <qd/dd_real.h>
+//#include <qd/dd_real.h>
+#include "../FGen/FGen.h"
 
 using namespace System;
+using namespace FGen;
 
 namespace qdDotNet {
 
@@ -23,7 +25,7 @@ namespace qdDotNet {
 			this->lo = 0;
 		}
 
-		Dd(dd_real val)
+		Dd(qp val)
 		{
 			this->hi = val._hi();
 			this->lo = val._lo();
@@ -31,15 +33,15 @@ namespace qdDotNet {
 
 		Dd(String^ val);
 
-		dd_real ToDdReal()
+		qp ToQp()
 		{
-			dd_real result = dd_real(this->hi, this->lo);
+			qp result = qp(this->hi, this->lo);
 			return result;
 		}
 
 		String^ GetStringVal()
 		{
-			dd_real temp = ToDdReal();
+			qp temp = ToQp();
 			std::string strVal = temp.to_string();
 
 			String^ result = gcnew String(strVal.c_str());

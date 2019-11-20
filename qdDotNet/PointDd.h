@@ -23,7 +23,7 @@ namespace qdDotNet
 
 		FGen::PointDd ToPointDd()
 		{
-			FGen::PointDd result = FGen::PointDd(x.ToDdReal(), y.ToDdReal());
+			FGen::PointDd result = FGen::PointDd(x.ToQp(), y.ToQp());
 			return result;
 		}
 

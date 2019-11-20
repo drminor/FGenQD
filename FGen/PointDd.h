@@ -1,21 +1,28 @@
 #pragma once
 
-#include <qd/dd_real.h>
+//#include <qd/dd_real.h>
+
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
+
 namespace FGen
 {
-	struct PointDd
+	struct FGEN_API PointDd
 	{
 
 	public:
 		PointDd();
-		PointDd(dd_real x, dd_real y);
+		PointDd(qp x, qp y);
 
-		inline dd_real X() const
+		inline qp X() const
 		{
 			return x;
 		};
 
-		inline dd_real Y() const
+		inline qp Y() const
 		{
 			return y;
 		};
@@ -27,8 +34,8 @@ namespace FGen
 		~PointDd();
 
 	private:
-		dd_real x;
-		dd_real y;
+		qp x;
+		qp y;
 	};
 
 }

@@ -1,5 +1,8 @@
+
+#include "stdafx.h"
 #include "../FGen/FGen.h"
 #include "FCoordsMath.h"
+
 
 namespace qdDotNet
 {

@@ -27,9 +27,6 @@
     <ClInclude Include="FGenJob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ManagedObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Dd.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -61,6 +61,15 @@ namespace qpvec
 		//return s;
 	}
 
+	//inline void three_sum(double &a, double &b, double &c)
+	//{
+	//	double t1, t2, t3;
+
+	//	t1 = two_sum(a, b, t2);
+	//	a = two_sum(c, t1, t3);
+	//	b = two_sum(t2, t3, c);
+	//}
+
 	twoSum::twoSum(int len)
 	{
 		_len = len;

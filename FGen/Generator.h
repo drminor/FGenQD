@@ -1,17 +1,23 @@
 #pragma once
 
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+
+#endif
+
 #include "stdafx.h"
 #include <vector>
-#include <qd/dd_real.h>
-
 #include "Job.h"
+#include "qp.h"
 
 namespace FGen
 {
 	const int BLOCK_WIDTH = 100;
 	const int BLOCK_HEIGHT = 100;
 
-	class Generator
+	class FGEN_API Generator
 	{
 	public:
 
@@ -29,8 +35,8 @@ namespace FGen
 		const char* m_Name;
 		FGen::Job m_Job;
 		unsigned int m_targetIterationCount;
-		dd_real* m_XPoints;
-		dd_real* m_YPoints;
+		qp* m_XPoints;
+		qp* m_YPoints;
 		double m_Log2;
 
 	public:
@@ -52,19 +58,19 @@ namespace FGen
 		~Generator();
 
 	private:
-		dd_real* GetXPoints();
-		dd_real* GetYPoints();
+		qp * GetXPoints();
+		qp * GetYPoints();
+
+		qp * GetPoints(int sampleCnt, int width, int areaStart, int areaEnd, qp startC, qp diff);
 
 		unsigned int GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal);
-		unsigned int GetCount2(dd_real cX, dd_real cY, double * curZ, unsigned int cntr, bool * done, dd_real xSquared, dd_real ySquared);
+		unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
 
 		float GetCountF(PointDd c, int maxIterations);
 
-		double GetEscapeVelocity(dd_real cX, dd_real cY, dd_real zX, dd_real zY, dd_real xSquared, dd_real ySquared);
+		double GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared);
 		PointDd GetPointDd(double * zValues);
 		void PointDdToDoubleArray(PointDd z, double * zValues);
-
-
 	};
 
 }

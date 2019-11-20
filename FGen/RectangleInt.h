@@ -1,10 +1,18 @@
 #pragma once
 
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
+
+#include "PointDd.h"
 #include "SizeInt.h"
 #include "PointInt.h"
+
 namespace FGen
 {
-	struct RectangleInt
+	struct FGEN_API RectangleInt
 	{
 
 	public:
