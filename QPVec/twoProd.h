@@ -9,10 +9,14 @@ namespace qpvec
 	{
 	public:
 
-		double two_prod(double a, double b, double& err);
+		//double two_prod(double a, double b, double& err);
 		void two_prodA(double *a, double *b, double *p, double *err);
-		void split(double a, double & hi, double & lo);
-		void splitA(double *a, double *hi, double *lo);
+
+		void two_prod_dArrayByQp(double * a, double hi, double lo, double * rHis, double * rLos);
+
+		//void split(double a, double & hi, double & lo);
+		void splitA(double * a, double * hi, double * lo);
+		void splitSingle(double * a, double * hi, double * lo);
 
 		twoProd(int len);
 		~twoProd();

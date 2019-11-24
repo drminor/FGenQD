@@ -8,25 +8,25 @@
 namespace qpvec
 {
 
-	double twoProd::two_prod(double a, double b, double& err)
-	{
-		double p = a * b;
-		if (!isinf(p))
-		{
-			double a_hi, a_lo, b_hi, b_lo;
+	//double twoProd::two_prod(double a, double b, double& err)
+	//{
+	//	double p = a * b;
+	//	if (!isinf(p))
+	//	{
+	//		double a_hi, a_lo, b_hi, b_lo;
 
-			split(a, a_hi, a_lo);
-			split(b, b_hi, b_lo);
+	//		split(a, a_hi, a_lo);
+	//		split(b, b_hi, b_lo);
 
-			err = ((a_hi * b_hi - p) + a_hi * b_lo + a_lo * b_hi) + a_lo * b_lo;
-		}
-		else
-		{
-			err = 0.0;
-		}
+	//		err = ((a_hi * b_hi - p) + a_hi * b_lo + a_lo * b_hi) + a_lo * b_lo;
+	//	}
+	//	else
+	//	{
+	//		err = 0.0;
+	//	}
 
-		return p;
-	}
+	//	return p;
+	//}
 
 	void twoProd::two_prodA(double *a, double *b, double *p, double *err)
 	{
@@ -68,38 +68,47 @@ namespace qpvec
 		vdAdd(_len, _s2, _al_m_bl, err);
 	}
 
-	void twoProd::split(double a, double& hi, double& lo)
+	// Multiplies the array of doubles by the single qp (hi and lo)
+	// and returns an array of qp in rHis and rLos
+	void twoProd::two_prod_dArrayByQp(double *a, double hi, double lo, double * rHis, double * rLos)
 	{
-		//int const QD_BITS = (std::numeric_limits< double >::digits + 1) / 2;
-		//static double const QD_SPLITTER = std::ldexp(1.0, QD_BITS) + 1.0;
-		//static double const QD_SPLIT_THRESH = std::ldexp((std::numeric_limits< double >::max)(), -QD_BITS - 1);
 
-		static double const QD_SPLITTER = pow(2, 27) + 1.0;
-		//static double const QD_SPLIT
-
-		double temp;
-
-		//if (std::abs(a) > QD_SPLIT_THRESH)
-		//{
-		//	a = std::ldexp(a, -QD_BITS - 1);
-		//	temp = QD_SPLITTER * a;
-		//	hi = temp - (temp - a);
-		//	lo = a - hi;
-		//	hi = std::ldexp(hi, QD_BITS + 1);
-		//	lo = std::ldexp(lo, QD_BITS + 1);
-		//}
-		//else
-		//{
-		//	temp = QD_SPLITTER * a;
-		//	hi = temp - (temp - a);
-		//	lo = a - hi;
-		//}
-
-
-		temp = QD_SPLITTER * a;
-		hi = temp - (temp - a);
-		lo = a - hi;
 	}
+
+
+
+	//void twoProd::split(double a, double& hi, double& lo)
+	//{
+	//	//int const QD_BITS = (std::numeric_limits< double >::digits + 1) / 2;
+	//	//static double const QD_SPLITTER = std::ldexp(1.0, QD_BITS) + 1.0;
+	//	//static double const QD_SPLIT_THRESH = std::ldexp((std::numeric_limits< double >::max)(), -QD_BITS - 1);
+
+	//	static double const QD_SPLITTER = pow(2, 27) + 1.0;
+	//	//static double const QD_SPLIT
+
+	//	double temp;
+
+	//	//if (std::abs(a) > QD_SPLIT_THRESH)
+	//	//{
+	//	//	a = std::ldexp(a, -QD_BITS - 1);
+	//	//	temp = QD_SPLITTER * a;
+	//	//	hi = temp - (temp - a);
+	//	//	lo = a - hi;
+	//	//	hi = std::ldexp(hi, QD_BITS + 1);
+	//	//	lo = std::ldexp(lo, QD_BITS + 1);
+	//	//}
+	//	//else
+	//	//{
+	//	//	temp = QD_SPLITTER * a;
+	//	//	hi = temp - (temp - a);
+	//	//	lo = a - hi;
+	//	//}
+
+
+	//	temp = QD_SPLITTER * a;
+	//	hi = temp - (temp - a);
+	//	lo = a - hi;
+	//}
 
 	void twoProd::splitA(double *a, double *hi, double *lo)
 	{
@@ -116,6 +125,20 @@ namespace qpvec
 		vdSub(_len, a, hi, lo);
 	}
 
+	void twoProd::splitSingle(double *a, double *hi, double *lo)
+	{
+		//temp = QD_SPLITTER * a;
+		_vh->clearVec(1, _splitTemp);
+		vdMul(1, _splitter, a, _splitTemp);
+
+		//hi = temp - (temp - a);
+		_vh->clearVec(1, _temp_minus_a);
+		vdSub(1, _splitTemp, a, _temp_minus_a);
+		vdSub(1, _splitTemp, _temp_minus_a, hi);
+
+		//lo = a - hi;
+		vdSub(1, a, hi, lo);
+	}
 
 	twoProd::twoProd(int len)
 	{

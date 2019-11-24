@@ -111,6 +111,13 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -147,6 +154,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CoordsMath.h" />
@@ -157,6 +171,7 @@
     <ClInclude Include="PointDd.h" />
     <ClInclude Include="PointInt.h" />
     <ClInclude Include="qp.h" />
+    <ClInclude Include="qpMath.h" />
     <ClInclude Include="RectangleInt.h" />
     <ClInclude Include="SizeInt.h" />
     <ClInclude Include="stdafx.h" />
@@ -170,6 +185,7 @@
     <ClCompile Include="PointDd.cpp" />
     <ClCompile Include="PointInt.cpp" />
     <ClCompile Include="qp.cpp" />
+    <ClCompile Include="qpMath.cpp" />
     <ClCompile Include="RectangleInt.cpp" />
     <ClCompile Include="SizeInt.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -178,6 +194,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QPVec\QPVec.vcxproj">
+      <Project>{e8cde1fd-8fa4-4d8c-bcad-31328ca56c7e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

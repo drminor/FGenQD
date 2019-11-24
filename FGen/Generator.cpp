@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "FGen.h"
+#include "qpMath.h"
 
 #include <iostream>
 //#include <limits>
@@ -14,6 +15,12 @@ namespace FGen
 		m_XPoints = GetXPoints();
 		m_YPoints = GetYPoints();
 		m_Log2 = std::log10(2);
+	}
+
+	Generator::~Generator()
+	{
+		delete[] m_XPoints;
+		delete[] m_YPoints;
 	}
 
 	std::vector<unsigned int>Generator::GetCounts()
@@ -425,33 +432,56 @@ namespace FGen
 
 	qp* Generator::GetPoints(int sampleCnt, int width, int areaStart, int areaEnd, qp startC, qp endC)
 	{
-		//int ySamples = m_Job.SamplePoints().H();
-		//int areaYSampleCnt = m_Job.Area().H() * BLOCK_HEIGHT;
+		qp* result = new qp[width];
 
-		qp* result = new qp[sampleCnt];
+		//qp diff = endC - startC;
 
-		//qp startC = m_Job.End().Y();
-		//qp diff = m_Job.Start().Y() - startC;
-		qp diff = endC - startC;
+		qpMath * qpCalc = new qpMath();
+		qp diff = qpCalc->getDiff(endC, startC);
 
+		double * diff_his = new double[width];
+		double * diff_los = new double[width];
+		double * inc_his = new double[width];
+		double * inc_los = new double[width];
 
-		//int start = m_Job.Area().SY() * BLOCK_HEIGHT;
-		//int end = start + width;
+		//int rPtr = 0;
+		//for (int i = areaStart; i < areaEnd; i++)
+		//{
+		//	double rat = (double)i / (double)sampleCnt;
+		//	qp s = rat * diff;
+		//	result[rPtr++] = startC + s;
+		//}
+
+		double * rats = new double[sampleCnt];
 
 		int rPtr = 0;
 		for (int i = areaStart; i < areaEnd; i++)
 		{
-			double rat = (double)i / (double)sampleCnt;
-			qp s = rat * diff;
-			result[rPtr++] = startC + s;
+			rats[rPtr++] = (double)i / (double)sampleCnt;
 		}
 
+		qpMath * qpVecCalc = new qpMath(width);
+
+		qpVecCalc->extendSingleQp(diff, diff_his, diff_los);
+		qpVecCalc->mulQpByD(diff_his, diff_los, rats, inc_his, inc_los);
+
+		double * startC_his = new double[width];
+		double * startC_los = new double[width];
+
+		qpVecCalc->extendSingleQp(startC, startC_his, startC_los);
+
+		qpVecCalc->addQps(inc_his, inc_los, startC_his, startC_los);
+
+		//qpVecCalc->makeQpVector(inc_his, inc_los, result);
+
+		delete[] diff_his, diff_los, startC_his, startC_los;
+		delete[] inc_his, inc_los;
+
+		delete qpCalc;
+		delete qpVecCalc;
+		//delete[] diff_his, diff_los, startC_his, startC_los;
+
 		return result;
-	}
-
-
-	Generator::~Generator()
-	{
 	}
 }
 

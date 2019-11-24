@@ -63,6 +63,8 @@ namespace FGen
 
 		qp * GetPoints(int sampleCnt, int width, int areaStart, int areaEnd, qp startC, qp diff);
 
+		
+
 		unsigned int GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal);
 		unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
 

@@ -15,3 +15,5 @@
 #include "SizeInt.h"
 #include "PointInt.h"
 #include "RectangleInt.h"
+
+//#include "qpMath.h"

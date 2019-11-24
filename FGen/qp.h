@@ -8,7 +8,6 @@
 
 #include <string>
 
-
 namespace FGen
 {
 	class FGEN_API qp
@@ -61,6 +60,7 @@ namespace FGen
 		}
 
 		~qp();
+
 
 	private:
 		double x[2];
