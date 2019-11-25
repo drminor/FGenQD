@@ -9,7 +9,7 @@
 #include "stdafx.h"
 #include <vector>
 #include "Job.h"
-//#include "qpMath.h"
+#include "GenPt.h"
 #include "qp.h"
 
 namespace FGen
@@ -31,9 +31,12 @@ namespace FGen
 		std::vector<unsigned int> GetXCounts(int yPtr);
 
 		void FillCounts(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues);
+		void FillCountsVec(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues);
+
+		PointInt GetNextCoordIndex(PointInt cur, bool &more);
+
 		void FillXCounts(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
 		void FillXCounts2(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
-		void FillXCounts3(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
 
 		void FillXCountsTest(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
 
@@ -49,7 +52,11 @@ namespace FGen
 		qp* m_XPoints;
 		qp* m_YPoints;
 		double m_Log2;
-		//qpMath * _qpCalc;
+
+		double * _cxCordHis;
+		double * _cxCordLos;
+		double * _cyCordHis;
+		double * _cyCordLos;
 
 		qp * GetXPoints();
 		qp * GetYPoints();
@@ -58,6 +65,9 @@ namespace FGen
 
 		unsigned int GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal);
 		unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
+
+		void Iterate(GenPt * genPt);
+		unsigned int GetCountsVec(GenPt genPt);
 
 		float GetCountF(PointDd c, int maxIterations);
 

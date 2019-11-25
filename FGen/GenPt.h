@@ -4,7 +4,7 @@
 #include <vector>
 #include "Job.h"
 #include "qp.h"
-#include "qpMath.h"
+#include "PointInt.h"
 
 namespace FGen
 {
@@ -12,13 +12,19 @@ namespace FGen
 	{
 
 	public:
-		GenPt(qpMath * qpCalc, int blockWidth);
+		GenPt(int blockWidth, double * cxCordHis, double * cxCordLos, double * cyCordHis, double * cyCordLos);
 
 		~GenPt();
 
-	private:
+		void SetC(qp x, qp y, int index, PointInt & resultIndex);
+		void SetCX(qp val, int index, PointInt & resultIndex);
+		void Clear(int index);
+		void SetEmpty(int index);
+		bool IsEmpty(int index);
+
 		int _blockWidth;
-		qpMath * _qpCalc;
+
+		PointInt * _resultIndexes;
 
 		double * _cxCordHis;
 		double * _cxCordLos;
@@ -34,6 +40,10 @@ namespace FGen
 		double * _xsCordLos;
 		double * _ysCordHis;
 		double * _ysCordLos;
+
+		double * _sumSqsM4;
+		int * _cnt;
+
 	};
 
 

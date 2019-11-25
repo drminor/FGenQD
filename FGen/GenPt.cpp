@@ -4,16 +4,18 @@
 
 namespace FGen
 {
-
-	GenPt::GenPt(qpMath * qpCalc, int blockWidth)
+	GenPt::GenPt(int blockWidth, double * cxCordHis, double * cxCordLos, double * cyCordHis, double * cyCordLos)
 	{
-		_qpCalc = qpCalc;
 		_blockWidth = blockWidth;
 
-		_cxCordHis = new double[blockWidth];
-		_cxCordLos = new double[blockWidth];
-		_cyCordHis = new double[blockWidth];
-		_cyCordLos = new double[blockWidth];
+		_cnt = new int[blockWidth];
+
+		_cxCordHis = cxCordHis;
+		_cxCordLos = cxCordLos;
+		_cyCordHis = cyCordHis;
+		_cyCordLos = cyCordLos;
+
+		_resultIndexes = new PointInt[blockWidth];
 
 		_zxCordHis = new double[blockWidth];
 		_zxCordLos = new double[blockWidth];
@@ -25,13 +27,74 @@ namespace FGen
 		_ysCordHis = new double[blockWidth];
 		_ysCordLos = new double[blockWidth];
 
+		_sumSqsM4 = new double[blockWidth];
+
+		for (int i = 0; i < blockWidth; i++) {
+			_cnt[i] = 0;
+
+			_zxCordHis[i] = 0;
+			_zxCordLos[i] = 0;
+			_zyCordHis[i] = 0;
+			_zyCordLos[i] = 0;
+
+			_xsCordHis[i] = 0;
+			_xsCordLos[i] = 0;
+			_ysCordHis[i] = 0;
+			_ysCordLos[i] = 0;
+
+			_sumSqsM4[i] = 0;
+			_resultIndexes[i] = PointInt(i, 0);
+		}
 	}
+
+	void GenPt::SetC(qp x, qp y, int index, PointInt & resultIndex)
+	{
+		_cxCordHis[index] = x._hi();
+		_cxCordLos[index] = x._lo();
+		_cyCordHis[index] = y._hi();
+		_cyCordLos[index] = y._lo();
+		Clear(index);
+	}
+
+	void GenPt::SetCX(qp val, int index, PointInt & resultIndex)
+	{
+		_cxCordHis[index] = val._hi();
+		_cxCordLos[index] = val._lo();
+		_resultIndexes[index] = resultIndex;
+		Clear(index);
+	}
+
+	void GenPt::Clear(int index)
+	{
+		_cnt[index] = 0;
+
+		_zxCordHis[index] = 0;
+		_zxCordLos[index] = 0;
+		_zyCordHis[index] = 0;
+		_zyCordLos[index] = 0;
+
+		_xsCordHis[index] = 0;
+		_xsCordLos[index] = 0;
+		_ysCordHis[index] = 0;
+		_ysCordLos[index] = 0;
+
+		_sumSqsM4[index] = 0;
+	}
+
+	void GenPt::SetEmpty(int index)
+	{
+		_resultIndexes[index] = PointInt(-1,-1);
+	}
+
+	bool GenPt::IsEmpty(int index)
+	{
+		return _resultIndexes[index].X() == -1;
+	}	
 
 	GenPt::~GenPt()
 	{
-		delete _qpCalc;
-		delete[] _cxCordHis, _cxCordLos, _cyCordHis, _cyCordLos;
 		delete[] _zxCordHis, _zxCordLos, _zyCordHis, _zyCordLos;
 		delete[] _xsCordHis, _xsCordLos, _ysCordHis, _ysCordLos;
+		delete[] _cnt, _resultIndexes, _sumSqsM4;
 	}
 }
