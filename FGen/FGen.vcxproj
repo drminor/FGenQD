@@ -167,6 +167,7 @@
     <ClInclude Include="CoordsDd.h" />
     <ClInclude Include="FGen.h" />
     <ClInclude Include="Generator.h" />
+    <ClInclude Include="GenPt.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="PointDd.h" />
     <ClInclude Include="PointInt.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="CoordMath.cpp" />
     <ClCompile Include="CoordsDd.cpp" />
     <ClCompile Include="Generator.cpp" />
+    <ClCompile Include="GenPt.cpp" />
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="PointDd.cpp" />
     <ClCompile Include="PointInt.cpp" />

@@ -7,6 +7,10 @@
 #define FGEN_API __declspec(dllimport)
 #endif
 
+#include "RectangleInt.h"
+#include "SizeInt.h"
+#include "PointDd.h"
+
 namespace FGen
 {
 	class FGEN_API Job

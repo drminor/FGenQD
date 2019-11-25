@@ -1,11 +1,11 @@
 #pragma once
 
 
-//#ifdef FGEN_EXPORTS
-//#define FGEN_API __declspec(dllexport)
-//#else
-//#define FGEN_API __declspec(dllimport)
-//#endif
+#ifdef FGEN_EXPORTS
+#define FGEN_API __declspec(dllexport)
+#else
+#define FGEN_API __declspec(dllimport)
+#endif
 
 #include "qp.h"
 #include "../QPVec/qpvec.h"
@@ -28,8 +28,14 @@ namespace FGen
 		void mulQpByD(double * his, double * los, double * f, double * rhis, double * rlos);
 
 		void extendSingleQp(qp val, double * his, double * los);
+		void clearVec(double * his, double * los);
 
 		void makeQpVector(double * his, double * los, qp * result);
+
+		int GetBlockWidth()
+		{
+			return _len;
+		}
 
 
 		~qpMath();

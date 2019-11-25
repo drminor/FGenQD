@@ -9,12 +9,16 @@
 
 namespace FGen
 {
-	Generator::Generator(FGen::Job job) : m_Job(job)
+	Generator::Generator(Job job) : m_Job(job)
 	{
 		m_targetIterationCount = m_Job.MaxIterations();
 		m_XPoints = GetXPoints();
 		m_YPoints = GetYPoints();
 		m_Log2 = std::log10(2);
+
+		//_qpCalc = new qpMath(BLOCK_WIDTH);
+
+
 	}
 
 	Generator::~Generator()
@@ -22,6 +26,16 @@ namespace FGen
 		delete[] m_XPoints;
 		delete[] m_YPoints;
 	}
+
+	int Generator::GetJobId()
+	{
+		return m_Job.JobId();
+	};
+
+	FGen::Job Generator::GetJob()
+	{
+		return m_Job;
+	};
 
 	std::vector<unsigned int>Generator::GetCounts()
 	{
@@ -134,7 +148,48 @@ namespace FGen
 			counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
 			resultPtr++;
 		}
+
+		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+			qp xCord = m_XPoints[startX + i];
+			counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
+			resultPtr++;
+		}
 	}
+
+	void Generator::FillXCounts3(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
+	{
+		qp xSquared = qp(0);
+		qp ySquared = qp(0);
+		int startX = pos.X() * BLOCK_WIDTH;
+		int startY = pos.Y() * BLOCK_HEIGHT;
+
+		int resultPtr = yPtr * BLOCK_HEIGHT;
+
+
+		//for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+		//	qp xCord = m_XPoints[startX + i];
+		//	counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
+		//	resultPtr++;
+		//}
+
+		qp yCord = m_YPoints[startY + yPtr];
+		//_qpCalc->extendSingleQp(yCord, _cyCordHis, _cyCordLos);
+
+		//for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+		//	qp xCord = m_XPoints[startX + i];
+		//	_cxCordHis[i] = xCord._hi;
+		//	_cxCordLos[i] = xCord._lo;
+		//}
+
+		//_qpCalc->clearVec(_zxCordHis, _zxCordLos);
+		//_qpCalc->clearVec(_zyCordHis, _zyCordLos);
+		//_qpCalc->clearVec(_xsCordHis, _xsCordLos);
+		//_qpCalc->clearVec(_ysCordHis, _ysCordLos);
+
+
+	}
+
+	
 
 	void Generator::FillXCountsTest(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
 	{

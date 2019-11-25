@@ -8,6 +8,8 @@
 #define FGEN_API __declspec(dllimport)
 #endif
 
+#include "qp.h"
+
 namespace FGen
 {
 	struct FGEN_API PointDd

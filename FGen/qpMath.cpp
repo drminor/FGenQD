@@ -171,6 +171,14 @@ namespace FGen
 		}
 	}
 
+	void qpMath::clearVec(double * his, double * los)
+	{
+		for (int i = 0; i < _len; i++) {
+			his[i] = 0.0;
+			los[i] = 0.0;
+		}
+	}
+
 	void qpMath::makeQpVector(double * his, double * los, qp * result)
 	{
 		for (int i = 0; i < _len; i++) {
