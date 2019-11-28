@@ -11,8 +11,7 @@ namespace qpvec
 
 		//double two_prod(double a, double b, double& err);
 		void two_prodA(double *a, double *b, double *p, double *err);
-
-		void two_prod_dArrayByQp(double * a, double hi, double lo, double * rHis, double * rLos);
+		void two_sqrA(double *a, double *p, double *err);
 
 		//void split(double a, double & hi, double & lo);
 		void splitA(double * a, double * hi, double * lo);
@@ -20,6 +19,8 @@ namespace qpvec
 
 		twoProd(int len);
 		~twoProd();
+
+		double * _two;
 
 	private:
 		int _len;
@@ -44,5 +45,9 @@ namespace qpvec
 		double * _ah_m_bh_minus_p;
 		double * _s1;
 		double * _s2;
+
+		// For TwoSqr
+		double * _2ah_m_bl;
+
 	};
 }

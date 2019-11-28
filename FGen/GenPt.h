@@ -41,8 +41,13 @@ namespace FGen
 		double * _ysCordHis;
 		double * _ysCordLos;
 
-		double * _sumSqsM4;
+		double * _sumSqsHis;
+		double * _sumSqsLos;
+
 		int * _cnt;
+
+		double * _rCordHis;
+		double * _rCordLos;
 
 	};
 

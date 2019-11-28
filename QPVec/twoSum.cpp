@@ -61,6 +61,28 @@ namespace qpvec
 		//return s;
 	}
 
+	///* Computes fl(a+b) and err(a+b).  Assumes |a| >= |b|. */
+	//inline double quick_two_sum(double a, double b, double& err)
+	//{
+	//	double s = a + b;
+	//	err = QD_ISFINITE(s) ? b - (s - a) : 0.0;
+	//	return s;
+	//}
+
+	void twoSum::quick_two_sumA(double *a, double *b, double *s, double* err)
+	{
+		//double s = a + b;
+		vdAdd(_len, a, b, s);
+
+		//double bb = s - a;
+		_vh->clearVec(_len, _bb);
+		vdSub(_len, s, a, _bb);
+
+		//err = b - bb;
+		vdSub(_len, b, _bb, err);
+	}
+
+
 	///* Computes fl(a-b) and err(a-b).  */
 	//inline double two_diff(double a, double b, double& err)
 	//{

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "FGen.h"
-#include "GenPt.h"
 #include "qpMath.h"
 
 #include <iostream>
@@ -17,6 +16,8 @@ namespace FGen
 		m_YPoints = GetYPoints();
 		m_Log2 = std::log10(2);
 
+		m_FGenMath = new FGenMath(BLOCK_WIDTH);
+
 		_cxCordHis = new double[BLOCK_WIDTH];
 		_cxCordLos = new double[BLOCK_WIDTH];
 		_cyCordHis = new double[BLOCK_WIDTH];
@@ -28,6 +29,8 @@ namespace FGen
 		delete[] m_XPoints;
 		delete[] m_YPoints;
 		delete[] _cxCordHis, _cxCordLos, _cyCordHis, _cyCordLos;
+
+		delete m_FGenMath;
 	}
 
 	int Generator::GetJobId()
@@ -172,10 +175,10 @@ namespace FGen
 		//	resultPtr++;
 		//}
 
-		qpMath * qpCalc = new qpMath(BLOCK_WIDTH);
+		//qpMath * qpCalc = new qpMath(BLOCK_WIDTH);
 
 		qp yCord = m_YPoints[startY];
-		qpCalc->extendSingleQp(yCord, _cyCordHis, _cyCordLos);
+		m_FGenMath->extendSingleQp(yCord, _cyCordHis, _cyCordLos);
 
 		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
 			qp xCord = m_XPoints[startX + i];
@@ -184,13 +187,13 @@ namespace FGen
 		}
 
 		GenPt * genPt = new GenPt(BLOCK_WIDTH, _cxCordHis, _cxCordLos, _cyCordHis, _cyCordLos);
-		PointInt nextCoordIndex = PointInt(0, 1); // column 0 of row 1.
+		PointInt curCoordIndex = PointInt(BLOCK_WIDTH - 1, 0); // last column of row 0
 
 		bool complete = false;
 
 		while (!complete)
 		{
-			Iterate(genPt);
+			m_FGenMath->Iterate(*genPt);
 
 			complete = true;
 			bool morePts;
@@ -199,25 +202,16 @@ namespace FGen
 			{
 				if (genPt->IsEmpty(i)) continue;
 
-				if (genPt->_sumSqsM4[i] > 0) {
+				if (QpGreaterThan(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i], 4.0)) {
 
 					// Save the results
 					int resultPtr = genPt->_resultIndexes[i].Y() * BLOCK_WIDTH + genPt->_resultIndexes[i].X();
 					counts[resultPtr] = genPt->_cnt[i];
 					doneFlags[resultPtr] = true;
 
-					// Get the next pt to include in the active vector
-					nextCoordIndex = GetNextCoordIndex(nextCoordIndex, morePts);
-
-					if (morePts) {
-						// Update the active vector with the new pt data.
-						qp cY = m_YPoints[startY + nextCoordIndex.Y()];
-						qp cX = m_XPoints[startX + nextCoordIndex.X()];
-						genPt->SetC(cX, cY, i, nextCoordIndex);
+					if (FillDoneSlot(i, genPt, curCoordIndex, startX, startY))
+					{
 						complete = false;
-					}
-					else {
-						genPt->SetEmpty(i);
 					}
 
 				}
@@ -229,18 +223,9 @@ namespace FGen
 						int resultPtr = genPt->_resultIndexes[i].Y() * BLOCK_WIDTH + genPt->_resultIndexes[i].X();
 						counts[resultPtr] = genPt->_cnt[i];
 
-						// Get the next pt to include in the active vector
-						nextCoordIndex = GetNextCoordIndex(nextCoordIndex, morePts);
-
-						if (morePts) {
-							// Update the active vector with the new pt data.
-							qp cY = m_YPoints[startY + nextCoordIndex.Y()];
-							qp cX = m_XPoints[startX + nextCoordIndex.X()];
-							genPt->SetC(cX, cY, i, nextCoordIndex);
+						if (FillDoneSlot(i, genPt, curCoordIndex, startX, startY))
+						{
 							complete = false;
-						}
-						else {
-							genPt->SetEmpty(i);
 						}
 					}
 					else {
@@ -250,8 +235,37 @@ namespace FGen
 			}
 		}
 
-		delete qpCalc;
 		delete genPt;
+	}
+
+	bool Generator::QpGreaterThan(double hi, double lo, double comp)
+	{
+		return (hi > comp) || ((hi == comp) && (lo > 0.0));
+
+		//bool le(double b) const
+		//{
+		//	if (isnan() || QD_ISNAN(b)) return false;
+		//	return (_hi() < b) || ((_hi() == b) && (_lo() <= 0.0));
+		//}
+	}
+
+	bool Generator::FillDoneSlot(int index, GenPt * genPt, PointInt &curCoordIndex, int startX, int startY)
+	{
+		bool morePts;
+		// Get the next pt to include in the active vector
+		curCoordIndex = GetNextCoordIndex(curCoordIndex, morePts);
+
+		if (morePts) {
+			// Update the active vector with the new pt data.
+			qp cY = m_YPoints[startY + curCoordIndex.Y()];
+			qp cX = m_XPoints[startX + curCoordIndex.X()];
+			genPt->SetC(cX, cY, index, curCoordIndex);
+		}
+		else {
+			genPt->SetEmpty(index);
+		}
+
+		return morePts;
 	}
 
 	PointInt Generator::GetNextCoordIndex(PointInt cur, bool &more)
@@ -272,13 +286,23 @@ namespace FGen
 		}
 	}
 
-	void Generator::Iterate(GenPt * genPt)
-	{
-		//zY = 2 * zX * zY + cY;
-		//zX = xSquared - ySquared + cX;
-		//xSquared = zX * zX;
-		//ySquared = zY * zY;
-	}
+	//void Generator::Iterate(GenPt * genPt)
+	//{
+	//	qpMath * qpCalc = new qpMath(BLOCK_WIDTH);
+
+	//	zY = 2 * zX * zY + cY;
+
+	//	zX * zY -> r
+	//	qpCalc->mulQpByQp(genPt->_zxCordHis, genPt->_zxCordLos, genPt->_zyCordHis, genPt->_zyCordLos, genPt->_rCordHis, genPt->_rCordHis);
+
+	//	2 * r -> zX;
+	//	zX + cY -> zY;
+	//	
+	//	
+	//	zX = xSquared - ySquared + cX;
+	//	xSquared = zX * zX;
+	//	ySquared = zY * zY;
+	//}
 
 	void Generator::FillXCountsTest(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
 	{
@@ -585,8 +609,8 @@ namespace FGen
 
 		double * diff_his = new double[width];
 		double * diff_los = new double[width];
-		double * inc_his = new double[width];
-		double * inc_los = new double[width];
+		double * temp_his = new double[width];
+		double * temp_los = new double[width];
 
 		//int rPtr = 0;
 		//for (int i = areaStart; i < areaEnd; i++)
@@ -607,23 +631,22 @@ namespace FGen
 		qpMath * qpVecCalc = new qpMath(width);
 
 		qpVecCalc->extendSingleQp(diff, diff_his, diff_los);
-		qpVecCalc->mulQpByD(diff_his, diff_los, rats, inc_his, inc_los);
+		qpVecCalc->mulQpByD(diff_his, diff_los, rats, temp_his, temp_los);
 
 		double * startC_his = new double[width];
 		double * startC_los = new double[width];
 
 		qpVecCalc->extendSingleQp(startC, startC_his, startC_los);
 
-		qpVecCalc->addQps(inc_his, inc_los, startC_his, startC_los);
+		qpVecCalc->addQps(temp_his, temp_los, startC_his, startC_los, diff_his, diff_los);
 
-		//qpVecCalc->makeQpVector(inc_his, inc_los, result);
+		qpVecCalc->makeQpVector(diff_his, diff_los, result);
 
 		delete[] diff_his, diff_los, startC_his, startC_los;
-		delete[] inc_his, inc_los;
+		delete[] temp_his, temp_los;
 
 		delete qpCalc;
 		delete qpVecCalc;
-		//delete[] diff_his, diff_los, startC_his, startC_los;
 
 		return result;
 	}

@@ -73,31 +73,10 @@ namespace FGen
 		//	}
 		//	return *this;
 		//}
-
 	}
 
-	//dd_real& operator+=(dd_real const& b)
-//{
-//	double s2;
-//	x[0] = qd::two_sum(x[0], b.x[0], e1);
-//	if (QD_ISFINITE(x[0]))
-//	{
-//		double t2, t1 = qd::two_sum(x[1], b.x[1], e2);
-//		x[1] = qd::two_sum(e1, t1, e3);
-//		e3 += e2;
-//		qd::three_sum(x[0], x[1], e3);
-//	}
-//	else
-//	{
-//		x[1] = 0.0;
-//	}
-//	return *this;
-//}
-
-	// Adds (in place) qp B to qp A
-	void qpMath::addQps(double * ahis, double * alos, double * bhis, double * blos)
+	void qpMath::addQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos)
 	{
-		double * s1 = new double[_len];
 		double * e1 = new double[_len];
 
 		double * t1 = new double[_len];
@@ -106,7 +85,6 @@ namespace FGen
 		double * e3 = new double[_len];
 
 		for (int i = 0; i < _len; i++) {
-			s1[i] = 0.0;
 			e1[i] = 0.0;
 
 			t1[i] = 0.0;
@@ -114,36 +92,115 @@ namespace FGen
 			e3[i] = 0.0;
 		}
 
-		_twoSum->two_sumA(ahis, bhis, s1, e1);
-		for (int i = 0; i < _len; i++) {
-			ahis[i] = s1[i];
-		}
+		_twoSum->two_sumA(ahis, bhis, rhis, e1);
 
 		_twoSum->two_sumA(alos, blos, t1, e2);
-		_twoSum->two_sumA(e1, t1, alos, e3);
+		_twoSum->two_sumA(e1, t1, rlos, e3);
 
 		vdAdd(_len, e2, e3, e1);
 
-		_twoSum->three_sum2(ahis, alos, e1);
+		_twoSum->three_sum2(rhis, rlos, e1);
 
-		delete[] s1, e1, t1, e2, e3;
+		delete[] e1, t1, e2, e3;
+
+		//dd_real& operator+=(dd_real const& b)
+		//{
+		//	double s2;
+		//	x[0] = qd::two_sum(x[0], b.x[0], e1);
+		//	if (QD_ISFINITE(x[0]))
+		//	{
+		//		double t2, t1 = qd::two_sum(x[1], b.x[1], e2);
+		//		x[1] = qd::two_sum(e1, t1, e3);
+		//		e3 += e2;
+		//		qd::three_sum(x[0], x[1], e3);
+		//	}
+		//	else
+		//	{
+		//		x[1] = 0.0;
+		//	}
+		//	return *this;
+		//}
 	}
 
-	//dd_real& operator*=(double b)
-//{
-//	double p1;
-//	x[0] = qd::two_prod(x[0], b, p1);
-//	if (QD_ISFINITE(x[0]))
-//	{
-//		x[1] *= b;
-//		qd::three_sum(x[0], x[1], p1);
-//	}
-//	else
-//	{
-//		x[1] = 0.0;
-//	}
-//	return *this;
-//}
+	void qpMath::subQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos)
+	{
+		double * e1 = new double[_len];
+
+		double * t1 = new double[_len];
+		double * e2 = new double[_len];
+
+		double * e3 = new double[_len];
+
+		for (int i = 0; i < _len; i++) {
+			e1[i] = 0.0;
+
+			t1[i] = 0.0;
+			e2[i] = 0.0;
+			e3[i] = 0.0;
+		}
+
+		_twoSum->two_diffA(ahis, bhis, rhis, e1);
+
+		_twoSum->two_diffA(alos, blos, t1, e2);
+		_twoSum->two_sumA(e1, t1, rlos, e3);
+
+		vdAdd(_len, e2, e3, e1);
+
+		_twoSum->three_sum2(rhis, rlos, e1);
+
+		delete[] e1, t1, e2, e3;
+
+		//dd_real& operator-=(dd_real const& b)
+		//{
+		//	double s2;
+		//	x[0] = qd::two_sum(x[0], -b.x[0], s2);
+		//	if (QD_ISFINITE(x[0]))
+		//	{
+		//		double t2, t1 = qd::two_sum(x[1], -b.x[1], t2);
+		//		x[1] = qd::two_sum(s2, t1, t1);
+		//		t1 += t2;
+		//		qd::three_sum(x[0], x[1], t1);
+		//	}
+		//	else
+		//	{
+		//		x[1] = 0.0;
+		//	}
+		//	return *this;
+		//}
+	}
+
+	void qpMath::subDFromQps(double * ahis, double * alos, double * b, double * rhis, double * rlos)
+	{
+		double * e1 = new double[_len];
+		double * e2 = new double[_len];
+
+		for (int i = 0; i < _len; i++) {
+			e1[i] = 0.0;
+			e2[i] = 0.0;
+		}
+
+		_twoSum->two_diffA(ahis, b, rhis, e1);
+
+		_twoSum->two_sumA(alos, e1, rlos, e2);
+		_twoSum->three_sum2(rhis, rlos, e2);
+
+		//dd_real& operator-=(double b)
+		//{
+		//	double s2;
+		//	x[0] = qd::two_sum(x[0], -b, s2);
+		//	if (QD_ISFINITE(x[0]))
+		//	{
+		//		x[1] = qd::two_sum(x[1], s2, s2);
+		//		qd::three_sum(x[0], x[1], s2);
+		//	}
+		//	else
+		//	{
+		//		x[1] = 0.0;
+		//	}
+		//	return *this;
+		//}
+	}
+
 	void qpMath::mulQpByD(double * his, double * los, double * f, double * rhis, double * rlos)
 	{
 		double * p1 = new double[_len];
@@ -158,6 +215,135 @@ namespace FGen
 		_twoSum->three_sum2(rhis, rlos, p1);
 
 		delete p1;
+
+		//dd_real& operator*=(double b)
+		//{
+		//	double p1;
+		//	x[0] = qd::two_prod(x[0], b, p1);
+		//	if (QD_ISFINITE(x[0]))
+		//	{
+		//		x[1] *= b;
+		//		qd::three_sum(x[0], x[1], p1);
+		//	}
+		//	else
+		//	{
+		//		x[1] = 0.0;
+		//	}
+		//	return *this;
+		//}
+
+	}
+
+	void qpMath::mulQpByQp(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos)
+	{
+		double * m2 = new double[_len];
+		double * m3 = new double[_len];
+		double * m4 = new double[_len];
+		double * m5 = new double[_len];
+		double * m6 = new double[_len];
+
+		for (int i = 0; i < _len; i++) {
+			m2[i] = 0.0;
+			m3[i] = 0.0;
+			m4[i] = 0.0;
+			m5[i] = 0.0;
+			m6[i] = 0.0;
+		}
+
+		//p[0] = qd::two_prod(x[0], b.x[0], p[1]);
+		_twoProd->two_prodA(ahis, bhis, rhis, rlos);
+
+		//p[2] = qd::two_prod(x[0], b.x[1], p[4]);
+		_twoProd->two_prodA(ahis, blos, m2, m4);
+
+		//p[3] = qd::two_prod(x[1], b.x[0], p[5]);
+		_twoProd->two_prodA(alos, bhis, m3, m5);
+
+		//p[6] = x[1] * b.x[1];
+		vdMul(_len, alos, blos, m6);
+
+		//	e powers in p = 0, 1, 2, 3, 2, 2, 2
+		//qd::three_sum(p[1], p[2], p[3]);
+		_twoSum->three_sum2(rlos, m2, m3);
+
+		//	e powers in p = 0, 1, 2, 3, 2, 3, 4
+		//p[2] += p[4] + p[5] + p[6];
+		vdAdd(_len, m2, m4, m3);
+		vdAdd(_len, m3, m5, m4);
+		vdAdd(_len, m4, m6, m5);
+
+		//qd::three_sum(p[0], p[1], p[2]);
+		_twoSum->three_sum2(rhis, rlos, m5);
+
+		//dd_real& operator*=(dd_real const& b)
+		//{
+		//	double p[7];
+		//	//	e powers in p = 0, 1, 1, 1, 2, 2, 2
+		//	p[0] = qd::two_prod(x[0], b.x[0], p[1]);
+		//	if (QD_ISFINITE(p[0]))
+		//	{
+		//		p[2] = qd::two_prod(x[0], b.x[1], p[4]);
+		//		p[3] = qd::two_prod(x[1], b.x[0], p[5]);
+		//		p[6] = x[1] * b.x[1];
+
+		//		//	e powers in p = 0, 1, 2, 3, 2, 2, 2
+		//		qd::three_sum(p[1], p[2], p[3]);
+
+		//		//	e powers in p = 0, 1, 2, 3, 2, 3, 4
+		//		p[2] += p[4] + p[5] + p[6];
+
+		//		qd::three_sum(p[0], p[1], p[2]);
+
+		//		x[0] = p[0];
+		//		x[1] = p[1];
+		//	}
+		//	else
+		//	{
+		//		x[0] = p[0];
+		//		x[1] = 0.0;
+		//	}
+		//	return *this;
+		//}
+	}
+
+	void qpMath::sqrQp(double * ahis, double * alos, double * rhis, double * rlos)
+	{
+		double * p1 = new double[_len];
+		double * p2 = new double[_len];
+		double * p3 = new double[_len];
+		double * p4 = new double[_len];
+
+		for (int i = 0; i < _len; i++) {
+			p1[i] = 0.0;
+			p2[i] = 0.0;
+			p3[i] = 0.0;
+			p4[i] = 0.0;
+		}
+
+		_twoProd->two_sqrA(ahis, p1, p2);
+		vdMul(_len, ahis, alos, p3);
+		vdMul(_len, p3, _twoProd->_two, p4);
+
+		vdAdd(_len, p2, p4, p3);
+
+		vdMul(_len, alos, alos, p2);
+		vdAdd(_len, p3, p2, p4);
+
+		_twoSum->quick_two_sumA(p1, p4, rhis, rlos);
+
+
+		//dd_real sqr(dd_real const& a)
+		//{
+		//	if (std::isnan(a))
+		//		return a;
+
+		//	double p2, p1 = qd::two_sqr(a._hi(), p2);
+		//	p2 += 2.0 * a._hi() * a._lo();
+		//	p2 += a._lo() * a._lo();
+
+		//	double s2, s1 = qd::quick_two_sum(p1, p2, s2);
+		//	return dd_real(s1, s2);
+		//}
 	}
 
 	void qpMath::extendSingleQp(qp val, double * his, double * los)

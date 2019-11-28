@@ -11,6 +11,8 @@ namespace qpvec
 
 		//double two_sum(double a, double b, double & err);
 		void two_sumA(double * a, double * b, double * s, double * err);
+		void quick_two_sumA(double *a, double *b, double *s, double* err);
+
 
 		void two_diffA(double * a, double * b, double * s, double * err);
 

@@ -27,7 +27,12 @@ namespace FGen
 		_ysCordHis = new double[blockWidth];
 		_ysCordLos = new double[blockWidth];
 
-		_sumSqsM4 = new double[blockWidth];
+		_sumSqsHis = new double[blockWidth];
+		_sumSqsLos = new double[blockWidth];
+
+		_rCordHis = new double[blockWidth];
+		_rCordLos = new double[blockWidth];
+
 
 		for (int i = 0; i < blockWidth; i++) {
 			_cnt[i] = 0;
@@ -42,8 +47,12 @@ namespace FGen
 			_ysCordHis[i] = 0;
 			_ysCordLos[i] = 0;
 
-			_sumSqsM4[i] = 0;
+			_sumSqsHis[i] = 0;
+			_sumSqsLos[i] - 0;
 			_resultIndexes[i] = PointInt(i, 0);
+
+			_rCordHis[i] = 0;
+			_rCordLos[i] = 0;
 		}
 	}
 
@@ -78,7 +87,8 @@ namespace FGen
 		_ysCordHis[index] = 0;
 		_ysCordLos[index] = 0;
 
-		_sumSqsM4[index] = 0;
+		_sumSqsHis[index] = 0;
+		_sumSqsLos[index] = 0;
 	}
 
 	void GenPt::SetEmpty(int index)
@@ -95,6 +105,9 @@ namespace FGen
 	{
 		delete[] _zxCordHis, _zxCordLos, _zyCordHis, _zyCordLos;
 		delete[] _xsCordHis, _xsCordLos, _ysCordHis, _ysCordLos;
-		delete[] _cnt, _resultIndexes, _sumSqsM4;
+		delete[] _cnt, _resultIndexes, _sumSqsHis, _sumSqsLos;
+
+		delete[] _rCordHis, _rCordLos;
+
 	}
 }

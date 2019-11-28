@@ -1,34 +1,27 @@
 #pragma once
 
+#ifdef QPVEC_EXPORTS
+#define QPVEC_API __declspec(dllexport)
+#else
+#define QPVEC_API __declspec(dllimport)
+#endif
+
 namespace qpvec
 {
-	class vHelper
+	class QPVEC_API vHelper
 	{
 	public:
 
-		inline double * createVec(int n)
-		{
-			double * result;
-			result = new double[n];
-			//for (int i = 0; i < n; i++)
-			//{
-			//	result[i] = 0.0;
-			//}
-			return result;
-		}
-
-		inline void clearVec(int n, double * vec)
-		{
-			for (int i = 0; i < n; i++)
-			{
-				vec[i] = 0.0;
-			}
-		}
-
-
 		vHelper();
 		~vHelper();
-	};
 
+		inline double * createVec(int n)
+		{
+			return new double[n];
+		}
+
+		void clearVec(int n, double * vec);
+		double * createAndInitVec(int n, double val);
+	};
 
 }

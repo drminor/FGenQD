@@ -11,6 +11,8 @@
 #include "Job.h"
 #include "GenPt.h"
 #include "qp.h"
+#include "FGenMath.h"
+
 
 namespace FGen
 {
@@ -53,6 +55,8 @@ namespace FGen
 		qp* m_YPoints;
 		double m_Log2;
 
+		FGenMath * m_FGenMath;
+
 		double * _cxCordHis;
 		double * _cxCordLos;
 		double * _cyCordHis;
@@ -66,8 +70,11 @@ namespace FGen
 		unsigned int GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal);
 		unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
 
-		void Iterate(GenPt * genPt);
-		unsigned int GetCountsVec(GenPt genPt);
+		//void Iterate(GenPt * genPt);
+		//unsigned int GetCountsVec(GenPt genPt);
+		bool FillDoneSlot(int index, GenPt * genPt, PointInt &curCoordIndex, int startX, int startY);
+		bool QpGreaterThan(double hi, double lo, double comp);
+
 
 		float GetCountF(PointDd c, int maxIterations);
 

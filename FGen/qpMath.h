@@ -23,9 +23,14 @@ namespace FGen
 
 		qp getDiff(qp end, qp start);
 
-		void addQps(double * ahis, double * alos, double * bhis, double * blos);
+		void addQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
+		void subQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
+		void subDFromQps(double * ahis, double * alos, double * b, double * rhis, double * rlos);
 
 		void mulQpByD(double * his, double * los, double * f, double * rhis, double * rlos);
+		void mulQpByQp(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
+
+		void sqrQp(double * ahis, double * alos, double * rhis, double * rlos);
 
 		void extendSingleQp(qp val, double * his, double * los);
 		void clearVec(double * his, double * los);
@@ -44,6 +49,8 @@ namespace FGen
 		int _len;
 		twoSum * _twoSum;
 		twoProd * _twoProd;
+
+		double * _two;
 	};
 
 }
