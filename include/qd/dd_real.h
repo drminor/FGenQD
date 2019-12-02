@@ -409,6 +409,8 @@ private:
 		return QD_ISINF( x[0] );
 	}
 
+	//#define QD_ISINF(x) ( ( ::_fpclass(x) & (_FPCLASS_NINF | _FPCLASS_PINF ) ) != 0 )
+	
 	void to_digits( char *s, int &expn, int precision ) const;
 
 	double x[2];

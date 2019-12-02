@@ -156,6 +156,9 @@ namespace qpvec
 	//	lo = a - hi;
 	//}
 
+	//void twoProd::mulPow(double *a, double *hi, double *lo)
+
+
 	void twoProd::splitA(double *a, double *hi, double *lo)
 	{
 		//temp = QD_SPLITTER * a;

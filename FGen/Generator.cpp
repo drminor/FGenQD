@@ -209,7 +209,7 @@ namespace FGen
 					counts[resultPtr] = genPt->_cnt[i];
 					doneFlags[resultPtr] = true;
 
-					if (FillDoneSlot(i, genPt, curCoordIndex, startX, startY))
+					if (FillDoneSlot(i, *genPt, curCoordIndex, startX, startY))
 					{
 						complete = false;
 					}
@@ -223,7 +223,7 @@ namespace FGen
 						int resultPtr = genPt->_resultIndexes[i].Y() * BLOCK_WIDTH + genPt->_resultIndexes[i].X();
 						counts[resultPtr] = genPt->_cnt[i];
 
-						if (FillDoneSlot(i, genPt, curCoordIndex, startX, startY))
+						if (FillDoneSlot(i, *genPt, curCoordIndex, startX, startY))
 						{
 							complete = false;
 						}
@@ -249,7 +249,7 @@ namespace FGen
 		//}
 	}
 
-	bool Generator::FillDoneSlot(int index, GenPt * genPt, PointInt &curCoordIndex, int startX, int startY)
+	bool Generator::FillDoneSlot(int index, GenPt &genPt, PointInt &curCoordIndex, int startX, int startY)
 	{
 		bool morePts;
 		// Get the next pt to include in the active vector
@@ -259,10 +259,10 @@ namespace FGen
 			// Update the active vector with the new pt data.
 			qp cY = m_YPoints[startY + curCoordIndex.Y()];
 			qp cX = m_XPoints[startX + curCoordIndex.X()];
-			genPt->SetC(cX, cY, index, curCoordIndex);
+			genPt.SetC(cX, cY, index, curCoordIndex);
 		}
 		else {
-			genPt->SetEmpty(index);
+			genPt.SetEmpty(index);
 		}
 
 		return morePts;
@@ -640,7 +640,7 @@ namespace FGen
 
 		qpVecCalc->addQps(temp_his, temp_los, startC_his, startC_los, diff_his, diff_los);
 
-		qpVecCalc->makeQpVector(diff_his, diff_los, result);
+		qpVecCalc->fillQpVector(diff_his, diff_los, result);
 
 		delete[] diff_his, diff_los, startC_his, startC_los;
 		delete[] temp_his, temp_los;

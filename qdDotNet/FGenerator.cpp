@@ -52,7 +52,8 @@ namespace qdDotNet
 		pin_ptr<bool> pDfs = &doneFlags[0];
 		pin_ptr<double> pZVals = &zValues[0];
 
-		m_Generator->FillCounts(pos, pCnts, pDfs, pZVals);
+		//m_Generator->FillCounts(pos, pCnts, pDfs, pZVals);
+		m_Generator->FillCountsVec(pos, pCnts, pDfs, pZVals);
 	}
 
 	void FGenerator::FillXCounts(PointInt position, array<UInt32>^% xCounts, array<bool>^% doneFlags, array<double>^% zValues, int yPtr)

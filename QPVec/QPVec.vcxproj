@@ -97,7 +97,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(OutDir)QPVec.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"</Command>
+      <Command>xcopy /y /d "$(OutDir)QPVec.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"
+xcopy /y /d "$(OutDir)QPVec.dll" "$(ProjectDir)..\FGenConsole\bin\Debug"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -150,7 +151,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(OutDir)QPVec.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"</Command>
+      <Command>xcopy /y /d "$(OutDir)QPVec.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"
+xcopy /y /d "$(OutDir)QPVec.dll" "$(ProjectDir)..\FGenConsole\bin\Debug"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

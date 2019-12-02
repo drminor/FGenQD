@@ -116,7 +116,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"</Command>
+      <Command>xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"
+xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\FGenConsole\bin\Debug"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -159,7 +160,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"</Command>
+      <Command>xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\QpVecClrClientConsole\bin\Debug"
+xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\FGenConsole\bin\Debug"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -174,6 +176,7 @@
     <ClInclude Include="PointInt.h" />
     <ClInclude Include="qp.h" />
     <ClInclude Include="qpMath.h" />
+    <ClInclude Include="qpParser.h" />
     <ClInclude Include="RectangleInt.h" />
     <ClInclude Include="SizeInt.h" />
     <ClInclude Include="stdafx.h" />
@@ -190,6 +193,7 @@
     <ClCompile Include="PointInt.cpp" />
     <ClCompile Include="qp.cpp" />
     <ClCompile Include="qpMath.cpp" />
+    <ClCompile Include="qpParser.cpp" />
     <ClCompile Include="RectangleInt.cpp" />
     <ClCompile Include="SizeInt.cpp" />
     <ClCompile Include="stdafx.cpp">

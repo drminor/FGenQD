@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "Dd.h"
-//#include <qd/dd_real.h>
-
 
 using namespace System;
 

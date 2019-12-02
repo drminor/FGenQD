@@ -48,7 +48,7 @@ namespace FGen
 			_ysCordLos[i] = 0;
 
 			_sumSqsHis[i] = 0;
-			_sumSqsLos[i] - 0;
+			_sumSqsLos[i] = 0;
 			_resultIndexes[i] = PointInt(i, 0);
 
 			_rCordHis[i] = 0;

@@ -28,10 +28,7 @@ namespace FGen
 			return _hi() + _lo();
 		}
 
-		std::string to_string()
-		{
-			return "1.0";
-		}
+		std::string to_string();
 
 		qp()
 		{
@@ -53,17 +50,19 @@ namespace FGen
 			x[1] = lo;
 		}
 
-		qp(std::string const& s)
-		{
-			x[0] = 0.0;
-			x[1] = 0.0;
-		}
+		qp(std::string const& s);
+		//std::string toHexString();
 
 		~qp();
+
+		int read(std::string const & s, qp & a);
 
 
 	private:
 		double x[2];
+
+		//double GetMantissa(double x, int &sign, int &exp);
+
 	};
 
 

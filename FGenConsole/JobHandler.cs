@@ -512,6 +512,11 @@ namespace FGenConsole
 
 		public async Task SendTestRequestsAsync()
 		{
+
+			Dd temp = new Dd(2.056789e-12);
+
+			string s = temp.GetStringVal();
+
 			// Wait for 2 seconds before beginning.
 			await Task.Delay(2 * 1000);
 

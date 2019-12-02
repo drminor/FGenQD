@@ -72,9 +72,8 @@ namespace FGen
 
 		//void Iterate(GenPt * genPt);
 		//unsigned int GetCountsVec(GenPt genPt);
-		bool FillDoneSlot(int index, GenPt * genPt, PointInt &curCoordIndex, int startX, int startY);
+		bool FillDoneSlot(int index, GenPt &genPt, PointInt &curCoordIndex, int startX, int startY);
 		bool QpGreaterThan(double hi, double lo, double comp);
-
 
 		float GetCountF(PointDd c, int maxIterations);
 

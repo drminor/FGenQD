@@ -282,12 +282,14 @@ namespace FGenConsole
 				bool[] doneFlags = subJobResult.DoneFlags;
 				double[] zValues = subJobResult.ZValues;
 
-				for (int yPtr = 0; yPtr < FGenerator.BLOCK_WIDTH; yPtr++)
-				{
-					if (ct.IsCancellationRequested || subJob.ParentJob.Closed) break;
-					subJob.ParentJob.FGenerator.FillXCounts2(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
-					//subJob.ParentJob.FGenerator.FillXCountsTest(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
-				}
+				//for (int yPtr = 0; yPtr < FGenerator.BLOCK_WIDTH; yPtr++)
+				//{
+				//	if (ct.IsCancellationRequested || subJob.ParentJob.Closed) break;
+				//	subJob.ParentJob.FGenerator.FillXCounts2(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
+				//	//subJob.ParentJob.FGenerator.FillXCountsTest(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
+				//}
+
+				subJob.ParentJob.FGenerator.FillCounts(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues);
 
 				subJobResult.Counts = counts;
 				subJobResult.DoneFlags = doneFlags;
