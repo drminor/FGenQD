@@ -22,6 +22,11 @@ namespace FGen
 		std::string ToStr(double hi, double lo);
 		std::string to_string(double hi, double lo, std::streamsize precision, int width, std::ios_base::fmtflags fmt, bool showpos, bool uppercase, char fill) const;
 
+		int Read(std::string const& s, double &hi, double &lo) const;
+
+		std::string GetStr(double x) const;
+
+
 	private:
 		int _len;
 		qpvec::vHelper * _vhelper;
@@ -38,10 +43,16 @@ namespace FGen
 		void MulAdd(double ahi, double alo, double bhi, double blo, double chi, double clo, double &rhi, double &rlo) const;
 
 		void ReciprocalInPlace(double &hi, double &lo) const;
+		void MulQpByQpInPlace(double &ahi, double &alo, double bhi, double blo) const;
+
 		void MulQpByDInPlace(double &ahi, double &alo, double b) const;
+
+		void AddDToQpInPlace(double &ahi, double &alo, double b) const;
 		void SubDFromQpInPlace(double &ahi, double &alo, double b) const;
 		
-		void Pown(double const &hi, double const &lo, int n, double &rHi, double &rLo);
+		//void Pown(double const &hi, double const &lo, int n, double &rHi, double &rLo);
+		void Pown(double hi, int n, double &rHi, double &rLo) const;
+
 
 		bool geD(double &ahi, double &alo, double b) const;
 		bool ltD(double &ahi, double &alo, double b) const;

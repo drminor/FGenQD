@@ -14,9 +14,11 @@ namespace FGen {
 
 	qp::qp(std::string const& s)
 	{
-		double h = std::stod(s);
-		x[0] = h;
-		x[1] = 0.0;
+		qpParser parser = qpParser();
+		parser.Read(s, x[0], x[1]);
+
+		//std::string result = parser.ToStr(x[0], x[1]);
+
 	}
 
 	qp::~qp()

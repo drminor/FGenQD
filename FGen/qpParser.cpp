@@ -2,11 +2,13 @@
 
 #include "stdafx.h"
 #include <algorithm>
-
-//#include <string>
-#include <cmath>
+#include <cctype>
+#include <stdio.h>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <limits>
+#include <cmath>
 
 #include "../QPVec/vHelper.h"
 #include "qpParser.h"
@@ -21,7 +23,6 @@ namespace FGen
 		_qpCalc = new qpMath();
 		_vhelper = new vHelper();
 		_two = _vhelper->createAndInitVec(_len, 2.0);
-		//_four = _vhelper->createAndInitVec(_len, 4.0);
 	}
 
 	qpParser::~qpParser()
@@ -34,7 +35,7 @@ namespace FGen
 
 	std::string qpParser::ToStr(double hi, double lo)
 	{
-		std::string result = to_string(hi, lo, 25, 1, 0, false, false, 'u');
+		std::string result = to_string(hi, lo, 32, 1, 0, false, false, 'u');
 		return result;
 	}
 
@@ -113,7 +114,7 @@ namespace FGen
 		_qpCalc->addOpAndQp(p, chi, clo, p);
 
 		//	p[0] = qd::two_sum(p[0], p[1] + p[2] + p[3], p[1]);
-		_qpCalc->two_sum(p[0], p[1] + p[2] + p[3], rhi, rlo);
+		rhi = _qpCalc->two_sum(p[0], p[1] + p[2] + p[3], rlo);
 
 		//	return dd_real(p[0], p[1]);
 	}
@@ -182,13 +183,13 @@ namespace FGen
 		}
 	}
 
-	void qpParser::Pown(double const &hi, double const &lo, int n, double &rHi, double &rLo)
+	void qpParser::Pown(double hi, int n, double &rHi, double &rLo) const
 	{
 		//	if (std::isnan(a))
 		//		return a;
 		if (isnan(hi)) {
 			rHi = hi;
-			rLo = lo;
+			rLo = 0;
 			return;
 		}
 
@@ -219,14 +220,14 @@ namespace FGen
 		case 1:
 			//s = a;
 			sHi = hi;
-			sLo = lo;
+			sLo = 0;
 			break;
 
 		case 2:
 			//s = sqr(a);
 
 			sHi2 = hi;
-			sLo2 = lo;
+			sLo2 = 0;
 			_qpCalc->sqrQp(&sHi2, &sLo2, &sHi, &sLo);
 			break;
 
@@ -234,7 +235,7 @@ namespace FGen
 		{
 			//dd_real r = a;
 			double tHi = hi;
-			double tLo = lo;
+			double tLo = 0;
 			double tHi2;
 			double tLo2;
 
@@ -247,7 +248,7 @@ namespace FGen
 				if (N % 2 == 1)
 				{
 					//s *= r;
-					_qpCalc->mulQpByQp(&sHi, &sLo, &tHi, &tLo, &sHi2, &sLo2);
+					_qpCalc->mulQpByQpS(sHi, sLo, tHi, tLo, sHi2, sLo2);
 					sHi = sHi2;
 					sLo = sLo2;
 				}
@@ -275,11 +276,36 @@ namespace FGen
 		rLo = sLo;
 	}
 
+	void qpParser::MulQpByQpInPlace(double &ahi, double &alo, double bhi, double blo) const
+	{
+		double rhi;
+		double rlo;
+
+		_qpCalc->mulQpByQpS(ahi, alo, bhi, blo, rhi, rlo);
+
+		ahi = rhi;
+		alo = rlo;
+	}
+
 	void qpParser::MulQpByDInPlace(double &ahi, double &alo, double b) const
 	{
 		double rhi;
 		double rlo;
-		_qpCalc->mulQpByD(&ahi, &alo, &b, &rhi, &rlo);
+
+		//double t = 0;
+		//_qpCalc->mulQpByQpS(ahi, alo, b, t, rhi, rlo);
+
+		_qpCalc->mulQpByDS(ahi, alo, b, rhi, rlo);
+
+		ahi = rhi;
+		alo = rlo;
+	}
+
+	void qpParser::AddDToQpInPlace(double &ahi, double &alo, double b) const
+	{
+		double rhi;
+		double rlo;
+		_qpCalc->addDToQpsS(ahi, alo, b, rhi, rlo);
 
 		ahi = rhi;
 		alo = rlo;
@@ -322,6 +348,12 @@ namespace FGen
 
 		double rHi = hi;
 		double rLo = lo;
+
+		std::string * shis = new std::string[50];
+		std::string * slos = new std::string[50];
+
+		std::string * shis2 = new std::string[50];
+		std::string * slos2 = new std::string[50];
 
 		//dd_real r = std::abs(*this);
 		if (hi < 0) {
@@ -435,10 +467,15 @@ namespace FGen
 			int d = static_cast<int>(rHi);
 
 			//r -= d;
-			SubDFromQpInPlace(rHi, rLo, d);
+			AddDToQpInPlace(rHi, rLo, -d);
+			//SubDFromQpInPlace(rHi, rLo, d);
+			shis[i] = GetStr(rHi);
+			slos[i] = GetStr(rLo);
 
 			//r *= 10.0;
 			MulQpByDInPlace(rHi, rLo, 10.0);
+			shis2[i] = GetStr(rHi);
+			slos2[i] = GetStr(rLo);
 		
 			s[i] = static_cast<char>(d + '0');
 		}
@@ -982,5 +1019,150 @@ namespace FGen
 	//	a = (sign == -1) ? -r : r;
 	//	return 0;
 	//}
+
+	int qpParser::Read(std::string const& s, double &hi, double &lo) const
+	{
+
+		double * his = new double[50];
+		double * los = new double[50];
+
+		double * his2 = new double[50];
+		double * los2 = new double[50];
+
+		std::string * shis = new std::string[50];
+		std::string * slos = new std::string[50];
+
+		std::string * shis2 = new std::string[50];
+		std::string * slos2 = new std::string[50];
+
+
+		char const* p = s.c_str();
+		char ch;
+		int sign = 0;
+		int point = -1;
+		int nd = 0;
+		int e = 0;
+		bool done = false;
+
+		//qp r = 0.0;
+		hi = 0;
+		lo = 0;
+
+		int nread;
+	
+		/* Skip any leading spaces */
+		while (std::isspace(*p))
+			++p;
+	
+		while (!done && (ch = *p) != '\0')
+		{
+			if (std::isdigit(ch))
+			{
+				if (nd > 15)
+				{
+					int aa = 0;
+				}
+				int d = ch - '0';
+				//r *= 10.0;
+				MulQpByDInPlace(hi, lo, 10.0);
+				his[nd] = hi;
+				los[nd] = lo;
+				shis[nd] = GetStr(hi);
+				slos[nd] = GetStr(lo);
+
+				//r += static_cast<double>(d);
+				AddDToQpInPlace(hi, lo, d);
+
+				his2[nd] = hi;
+				los2[nd] = lo;
+				shis2[nd] = GetStr(hi);
+				slos2[nd] = GetStr(lo);
+
+
+				nd++;
+			}
+			else
+			{
+				switch (ch)
+				{
+				case '.':
+					if (point >= 0)
+						return -1;
+					point = nd;
+					break;
+	
+				case '-':
+				case '+':
+					if (sign != 0 || nd > 0)
+						return -1;
+					sign = (ch == '-') ? -1 : 1;
+					break;
+	
+				case 'E':
+				case 'e':
+					nread = sscanf_s(p + 1, "%d", &e);
+
+					done = true;
+					if (nread != 1)
+						return -1;
+					break;
+	
+				default:
+					return -1;
+				}
+			}
+	
+			++p;
+		}
+	
+		if (point >= 0)
+		{
+			e -= (nd - point);
+		}
+
+		std::string shiF = GetStr(hi);
+		std::string sloF = GetStr(lo);
+	
+		if (e > 0)
+		{
+			//r *= pown(_ten, e);
+			//double mx = pow(10, e);
+			double mxHi = 0;
+			double mxLo = 0;
+			Pown(10, e, mxHi, mxLo);
+			MulQpByQpInPlace(hi, lo, mxHi, mxLo);
+		}
+		else
+			if (e < 0)
+			{
+				//r /= pown(_ten, -e);
+				//double mx = pow(10, e);
+				//MulQpByDInPlace(hi, lo, mx);
+				double mxHi = 0;
+				double mxLo = 0;
+				Pown(10, e, mxHi, mxLo);
+				MulQpByQpInPlace(hi, lo, mxHi, mxLo);
+			}
+
+	
+		//a = (sign == -1) ? -r : r;
+		if (sign == -1) {
+			hi = -hi;
+			lo = -lo;
+		}
+
+		std::string shiF2 = GetStr(hi);
+		std::string sloF2 = GetStr(lo);
+
+		return 0;
+	}
+
+	std::string qpParser::GetStr(double x) const
+	{
+		std::ostringstream strout;
+		strout << std::fixed << std::setprecision(22) << x;
+		std::string str = strout.str();
+		return str;
+	}
 
 }

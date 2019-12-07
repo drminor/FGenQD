@@ -512,10 +512,14 @@ namespace FGenConsole
 
 		public async Task SendTestRequestsAsync()
 		{
+			string eStr = "2.718281828459045235360287471352662498";
+
+			Dd ddE = new Dd(eStr);
+
+			string s = ddE.GetStringVal();
 
 			Dd temp = new Dd(2.056789e-12);
-
-			string s = temp.GetStringVal();
+			string s2 = temp.GetStringVal();
 
 			// Wait for 2 seconds before beginning.
 			await Task.Delay(2 * 1000);
@@ -636,5 +640,6 @@ namespace FGenConsole
 		//}
 
 		#endregion
+
 	}
 }

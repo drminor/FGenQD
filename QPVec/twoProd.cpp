@@ -48,7 +48,8 @@ namespace qpvec
 		vdMul(_len, _a_hi, _b_hi, _ah_m_bh);
 
 		_vh->clearVec(_len, _ah_m_bh_minus_p);
-		vdSub(_len, _ah_m_bh, p, _ah_m_bh_minus_p);
+		//vdSub(_len, _ah_m_bh, p, _ah_m_bh_minus_p);
+		two_diffA(_ah_m_bh, p, _ah_m_bh_minus_p, _bb);
 
 		_vh->clearVec(_len, _ah_m_bl);
 		vdMul(_len, _a_hi, _b_lo, _ah_m_bl);
@@ -65,7 +66,37 @@ namespace qpvec
 		_vh->clearVec(_len, _al_m_bl);
 		vdMul(_len, _a_lo, _b_lo, _al_m_bl);
 
-		vdAdd(_len, _s2, _al_m_bl, err);
+		vdAdd(_len, _s2, _al_m_bl, _s1);
+
+		vdAdd(_len, _s1, _bb, err);
+	}
+
+	void twoProd::two_diffA(double *a, double *b, double *s, double *err)
+	{
+		//double s = a - b;
+		vdSub(_len, a, b, s);
+
+		//double bb = s - a;
+		_vh->clearVec(_len, _bb);
+		vdSub(_len, s, a, _bb);
+
+		//double bbb = b + bb;
+		_vh->clearVec(_len, _b_plus_bb);
+		vdAdd(_len, b, _bb, _b_plus_bb);
+
+		//double sbb = s - bb;
+		_vh->clearVec(_len, _s_minus_bb);
+		vdSub(_len, s, _bb, _s_minus_bb);
+
+		//double asbb = a - sbb;
+		_vh->clearVec(_len, _a_minus_s_minus_bb);
+		vdSub(_len, a, _s_minus_bb, _a_minus_s_minus_bb);
+
+		//double err2 = asbb - bbb;
+		vdSub(_len, _a_minus_s_minus_bb, _b_plus_bb, err);
+
+		//err = (a - (s - bb)) - (b + bb);
+		//return s;
 	}
 
 	void twoProd::two_sqrA(double *a, double *p, double *err)
@@ -216,6 +247,11 @@ namespace qpvec
 
 		_two = _vh->createAndInitVec(_len, 2.0);
 		_2ah_m_bl = _vh->createVec(_len);
+
+		_bb = _vh->createVec(_len);
+		_b_plus_bb = _vh->createVec(_len);
+		_s_minus_bb = _vh->createVec(_len);
+		_a_minus_s_minus_bb = _vh->createVec(_len);
 	}
 
 	twoProd::~twoProd()
@@ -227,5 +263,8 @@ namespace qpvec
 		delete[] _ah_m_bh_minus_p, _s1, _s2;
 
 		delete[] _two, _2ah_m_bl;
+
+		delete[] _bb, _b_plus_bb, _s_minus_bb, _a_minus_s_minus_bb;
+
 	}
 }

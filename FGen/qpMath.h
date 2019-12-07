@@ -25,10 +25,19 @@ namespace FGen
 
 		void addQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
 		void subQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
+
+		void addDToQps(double * ahis, double * alos, double * b, double * rhis, double * rlos);
+		void addDToQpsS(double ahi, double alo, double b, double &rhi, double &rlo);
+
 		void subDFromQps(double * ahis, double * alos, double * b, double * rhis, double * rlos);
 
 		void mulQpByD(double * his, double * los, double * f, double * rhis, double * rlos);
+		void mulQpByDS(double hi, double lo, double f, double &rhi, double &rlo);
+
+
 		void mulQpByQp(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
+		void mulQpByQpS(double ahis, double alos, double bhis, double blos, double &rhis, double &rlos);
+
 
 		void sqrQp(double * ahis, double * alos, double * rhis, double * rlos);
 
@@ -36,8 +45,13 @@ namespace FGen
 		void addOpAndQp(double const* a, double bhi, double blo, double * s);
 		void renorm(double &c0, double &c1, double &c2, double &c3, double &c4);
 
-		void two_sum(double a, double b, double &s, double &err);
+		double two_sum(double a, double b, double &err);
+
 		void three_sum2(double &a, double &b, double c);
+
+		double two_prod(double a, double b, double &err);
+
+		void split(double a, double &hi, double &lo);
 
 		void extendSingleQp(qp val, double * his, double * los);
 		void clearVec(double * his, double * los);

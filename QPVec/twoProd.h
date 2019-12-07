@@ -49,5 +49,12 @@ namespace qpvec
 		// For TwoSqr
 		double * _2ah_m_bl;
 
+		void two_diffA(double *a, double *b, double *s, double *err);
+
+		double * _bb;
+		double * _b_plus_bb;
+		double * _s_minus_bb;
+		double * _a_minus_s_minus_bb;
+
 	};
 }
