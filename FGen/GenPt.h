@@ -16,8 +16,8 @@ namespace FGen
 
 		~GenPt();
 
-		void SetC(qp x, qp y, int index, PointInt & resultIndex);
-		void SetCX(qp val, int index, PointInt & resultIndex);
+		void SetC(qp x, qp y, int index, PointInt resultIndex);
+		//void SetCX(qp val, int index, PointInt resultIndex);
 		void Clear(int index);
 		void SetEmpty(int index);
 		bool IsEmpty(int index);

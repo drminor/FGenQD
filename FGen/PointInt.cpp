@@ -13,6 +13,13 @@ namespace FGen
 		y = 0;
 	}
 
+	void PointInt::SetXY(int nx, int ny)
+	{
+		x = nx;
+		y = ny;
+	}
+
+
 	PointInt::~PointInt()
 	{
 	}

@@ -15,22 +15,12 @@ namespace FGen
 		m_XPoints = GetXPoints();
 		m_YPoints = GetYPoints();
 		m_Log2 = std::log10(2);
-
-		m_FGenMath = new FGenMath(BLOCK_WIDTH);
-
-		_cxCordHis = new double[BLOCK_WIDTH];
-		_cxCordLos = new double[BLOCK_WIDTH];
-		_cyCordHis = new double[BLOCK_WIDTH];
-		_cyCordLos = new double[BLOCK_WIDTH];
 	}
 
 	Generator::~Generator()
 	{
 		delete[] m_XPoints;
 		delete[] m_YPoints;
-		delete[] _cxCordHis, _cxCordLos, _cyCordHis, _cyCordLos;
-
-		delete m_FGenMath;
 	}
 
 	int Generator::GetJobId()
@@ -175,42 +165,51 @@ namespace FGen
 		//	resultPtr++;
 		//}
 
-		//qpMath * qpCalc = new qpMath(BLOCK_WIDTH);
+		FGenMath * fgenCalc = new FGenMath(BLOCK_WIDTH);
+
+
+		double * cxCordHis = new double[BLOCK_WIDTH];
+		double * cxCordLos = new double[BLOCK_WIDTH];
+		double * cyCordHis = new double[BLOCK_WIDTH];
+		double * cyCordLos = new double[BLOCK_WIDTH];
 
 		qp yCord = m_YPoints[startY];
-		m_FGenMath->extendSingleQp(yCord, _cyCordHis, _cyCordLos);
+		fgenCalc->extendSingleQp(yCord, cyCordHis, cyCordLos);
 
 		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
 			qp xCord = m_XPoints[startX + i];
-			_cxCordHis[i] = xCord._hi();
-			_cxCordLos[i] = xCord._lo();
+			cxCordHis[i] = xCord._hi();
+			cxCordLos[i] = xCord._lo();
 		}
 
-		GenPt * genPt = new GenPt(BLOCK_WIDTH, _cxCordHis, _cxCordLos, _cyCordHis, _cyCordLos);
+		GenPt * genPt = new GenPt(BLOCK_WIDTH, cxCordHis, cxCordLos, cyCordHis, cyCordLos);
 		PointInt curCoordIndex = PointInt(BLOCK_WIDTH - 1, 0); // last column of row 0
 
 		bool complete = false;
 
 		while (!complete)
 		{
-			m_FGenMath->Iterate(*genPt);
+			fgenCalc->Iterate(*genPt);
 
 			complete = true;
-			bool morePts;
-			bool * morePtsAddress = &morePts;
 			for (int i = 0; i < BLOCK_WIDTH; i++)
 			{
 				if (genPt->IsEmpty(i)) continue;
 
+				double ss = genPt->_sumSqsHis[i];
 				if (QpGreaterThan(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i], 4.0)) {
 
-					// Save the results
-					int resultPtr = genPt->_resultIndexes[i].Y() * BLOCK_WIDTH + genPt->_resultIndexes[i].X();
-					counts[resultPtr] = genPt->_cnt[i];
-					doneFlags[resultPtr] = true;
+					//// Save the results
+					//int yPtr = genPt->_resultIndexes[i].Y();
+					//int xPtr = genPt->_resultIndexes[i].X();
+
+					SaveCnt(i, *genPt, true, counts, doneFlags, zValues);
 
 					if (FillDoneSlot(i, *genPt, curCoordIndex, startX, startY))
 					{
+						//int yPtr2 = genPt->_resultIndexes[i].Y();
+						//int xPtr2 = genPt->_resultIndexes[i].X();
+
 						complete = false;
 					}
 
@@ -220,8 +219,7 @@ namespace FGen
 					if (genPt->_cnt[i] == m_targetIterationCount) {
 
 						// Save the results
-						int resultPtr = genPt->_resultIndexes[i].Y() * BLOCK_WIDTH + genPt->_resultIndexes[i].X();
-						counts[resultPtr] = genPt->_cnt[i];
+						SaveCnt(i, *genPt, false, counts, doneFlags, zValues);
 
 						if (FillDoneSlot(i, *genPt, curCoordIndex, startX, startY))
 						{
@@ -235,7 +233,9 @@ namespace FGen
 			}
 		}
 
+		delete fgenCalc;
 		delete genPt;
+		delete[] cxCordHis, cxCordLos, cyCordHis, cyCordLos;
 	}
 
 	bool Generator::QpGreaterThan(double hi, double lo, double comp)
@@ -247,6 +247,13 @@ namespace FGen
 		//	if (isnan() || QD_ISNAN(b)) return false;
 		//	return (_hi() < b) || ((_hi() == b) && (_lo() <= 0.0));
 		//}
+	}
+
+	void Generator::SaveCnt(int index, GenPt &genPt, bool isDone, unsigned int * counts, bool * doneFlags, double * zValues)
+	{
+		int resultPtr = genPt._resultIndexes[index].Y() * BLOCK_WIDTH + genPt._resultIndexes[index].X();
+		counts[resultPtr] = 10000 * genPt._cnt[index];
+		doneFlags[resultPtr] = isDone;
 	}
 
 	bool Generator::FillDoneSlot(int index, GenPt &genPt, PointInt &curCoordIndex, int startX, int startY)
@@ -285,24 +292,6 @@ namespace FGen
 			return PointInt(cur.X() + 1, cur.Y());
 		}
 	}
-
-	//void Generator::Iterate(GenPt * genPt)
-	//{
-	//	qpMath * qpCalc = new qpMath(BLOCK_WIDTH);
-
-	//	zY = 2 * zX * zY + cY;
-
-	//	zX * zY -> r
-	//	qpCalc->mulQpByQp(genPt->_zxCordHis, genPt->_zxCordLos, genPt->_zyCordHis, genPt->_zyCordLos, genPt->_rCordHis, genPt->_rCordHis);
-
-	//	2 * r -> zX;
-	//	zX + cY -> zY;
-	//	
-	//	
-	//	zX = xSquared - ySquared + cX;
-	//	xSquared = zX * zX;
-	//	ySquared = zY * zY;
-	//}
 
 	void Generator::FillXCountsTest(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
 	{
@@ -471,7 +460,7 @@ namespace FGen
 	    return result;
 	}
 
-	std::vector<float>	Generator::GetCountsF()
+	std::vector<float> Generator::GetCountsF()
 	{
 		int xSamples = m_Job.SamplePoints().W();
 		int ySamples = m_Job.SamplePoints().H();
@@ -498,7 +487,7 @@ namespace FGen
 		return result;
 	}
 
-	std::vector<float>	Generator::GetXCountsF(int yPtr)
+	std::vector<float> Generator::GetXCountsF(int yPtr)
 	{
 		std::vector<float> result;
 
@@ -549,24 +538,13 @@ namespace FGen
 		int xSamples = m_Job.SamplePoints().W();
 		int areaXSampleCnt = m_Job.Area().W() * BLOCK_WIDTH;
 
-		//qp* result = new qp[areaXSampleCnt];
-
 		qp startC = m_Job.Start().X();
-		//qp diff = m_Job.End().X() - startC;
 		qp endC = m_Job.End().X();
 
 		int start = m_Job.Area().SX() * BLOCK_WIDTH;
 		int end = start + areaXSampleCnt;
 
 		qp* result = GetPoints(xSamples, areaXSampleCnt, start, end, startC, endC);
-
-		//int rPtr = 0;
-		//for (int i = start; i < end; i++)
-		//{
-		//	double rat = (double)i / (double)xSamples;
-		//	qp s = rat * diff;
-		//	result[rPtr++] = startC + s;
-		//}
 
 		return result;
 	}
@@ -576,24 +554,14 @@ namespace FGen
 		int ySamples = m_Job.SamplePoints().H();
 		int areaYSampleCnt = m_Job.Area().H() * BLOCK_HEIGHT;
 
-		//qp* result = new qp[ySamples];
 
 		qp startC = m_Job.End().Y();
-		//qp diff = m_Job.Start().Y() - startC;
 		qp endC = m_Job.Start().Y();
 
 		int start = m_Job.Area().SY() * BLOCK_HEIGHT;
 		int end = start + areaYSampleCnt;
 
 		qp* result = GetPoints(ySamples, areaYSampleCnt, start, end, startC, endC);
-
-		//int rPtr = 0;
-		//for (int i = start; i < end; i++)
-		//{
-		//	double rat = (double)i / (double)ySamples;
-		//	qp s = rat * diff;
-		//	result[rPtr++] = startC + s;
-		//}
 
 		return result;
 	}
@@ -602,8 +570,6 @@ namespace FGen
 	{
 		qp* result = new qp[width];
 
-		//qp diff = endC - startC;
-
 		qpMath * qpCalc = new qpMath();
 		qp diff = qpCalc->getDiff(endC, startC);
 
@@ -611,14 +577,6 @@ namespace FGen
 		double * diff_los = new double[width];
 		double * temp_his = new double[width];
 		double * temp_los = new double[width];
-
-		//int rPtr = 0;
-		//for (int i = areaStart; i < areaEnd; i++)
-		//{
-		//	double rat = (double)i / (double)sampleCnt;
-		//	qp s = rat * diff;
-		//	result[rPtr++] = startC + s;
-		//}
 
 		double * rats = new double[sampleCnt];
 

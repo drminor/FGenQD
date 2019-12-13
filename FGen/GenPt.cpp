@@ -56,20 +56,13 @@ namespace FGen
 		}
 	}
 
-	void GenPt::SetC(qp x, qp y, int index, PointInt & resultIndex)
+	void GenPt::SetC(qp x, qp y, int index, PointInt resultIndex)
 	{
 		_cxCordHis[index] = x._hi();
 		_cxCordLos[index] = x._lo();
 		_cyCordHis[index] = y._hi();
 		_cyCordLos[index] = y._lo();
-		Clear(index);
-	}
-
-	void GenPt::SetCX(qp val, int index, PointInt & resultIndex)
-	{
-		_cxCordHis[index] = val._hi();
-		_cxCordLos[index] = val._lo();
-		_resultIndexes[index] = resultIndex;
+		_resultIndexes[index].SetXY(resultIndex.X(), resultIndex.Y());
 		Clear(index);
 	}
 
@@ -93,7 +86,7 @@ namespace FGen
 
 	void GenPt::SetEmpty(int index)
 	{
-		_resultIndexes[index] = PointInt(-1,-1);
+		_resultIndexes[index].SetXY(-1, -1);
 	}
 
 	bool GenPt::IsEmpty(int index)

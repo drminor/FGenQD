@@ -33,31 +33,49 @@ namespace FGen
 	{
 		//   zY = 2 * zX * zY + cY;
 		//zX * zY -> r
-		_qpCalc->mulQpByQp(genPt._zxCordHis, genPt._zxCordLos, genPt._zyCordHis, genPt._zyCordLos, genPt._rCordHis, genPt._rCordHis);
+		_qpCalc->mulQpByQp(genPt._zxCordHis, genPt._zxCordLos, genPt._zyCordHis, genPt._zyCordLos, genPt._rCordHis, genPt._rCordLos);
+
+		double zy = genPt._zxCordHis[0] * genPt._zyCordHis[0];
 
 		//r * 2 -> zX;
 		_qpCalc->mulQpByD(genPt._rCordHis, genPt._rCordLos, _two, genPt._zxCordHis, genPt._zxCordLos);
+		zy *= 2;
 
 		//zX + cY -> zY;
 		_qpCalc->addQps(genPt._zxCordHis, genPt._zxCordLos, genPt._cyCordHis, genPt._cyCordLos, genPt._zyCordHis, genPt._zyCordLos);
-
+		zy += genPt._cyCordHis[0];
+		//double zyComp = genPt._zyCordHis[0];
+		//genPt._zyCordHis[1] = zy;
 
 		//  zX = xSquared - ySquared + cX;
 		//xSquared - ySquared -> r
 		_qpCalc->subQps(genPt._xsCordHis, genPt._xsCordLos, genPt._ysCordHis, genPt._ysCordLos, genPt._rCordHis, genPt._rCordLos);
+		double zx = genPt._xsCordHis[0] - genPt._ysCordHis[0];
 
 		//r + cX -> zX
 		_qpCalc->addQps(genPt._rCordHis, genPt._rCordLos, genPt._cxCordHis, genPt._cxCordLos, genPt._zxCordHis, genPt._zxCordLos);
+		zx += genPt._cxCordHis[0];
+		//genPt._zxCordHis[1] = zx;
+		//double zxComp = genPt._zxCordHis[0];
 
 
 		//xSquared = zX * zX;
 		_qpCalc->sqrQp(genPt._zxCordHis, genPt._zxCordLos, genPt._xsCordHis, genPt._xsCordLos);
+		double xSq = zx * zx;
+		//genPt._xsCordHis[1] = xSq;
+		//double xSqComp = genPt._xsCordHis[0];
 
 		//ySquared = zY * zY;
 		_qpCalc->sqrQp(genPt._zyCordHis, genPt._zyCordLos, genPt._ysCordHis, genPt._ysCordLos);
+		double ySq = zy * zy;
+		//genPt._ysCordHis[1] = ySq;
+		//double ySqComp = genPt._ysCordHis[0];
 
 		//_sumSqs = xSquared + ySquared
 		_qpCalc->addQps(genPt._xsCordHis, genPt._xsCordLos, genPt._ysCordHis, genPt._ysCordLos, genPt._sumSqsHis, genPt._sumSqsLos);
+		double ss = xSq + ySq;
+		//genPt._sumSqsHis[1] = ss;
+		//double ssComp = genPt._sumSqsHis[0];
 
 		//_sumSqsM4 = (xSquared + ySquared) - 4;
 		//_qpCalc->subDFromQps(genPt._rCordHis, genPt._rCordHis, _four, genPt._sumSqsHis, genPt._sumSqsLos);

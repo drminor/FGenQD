@@ -15,6 +15,8 @@ namespace FGen
 		PointInt();
 		PointInt(int x, int y);
 
+		void SetXY(int nx, int ny);
+
 		inline int X() const
 		{
 			return x;

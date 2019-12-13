@@ -512,14 +512,14 @@ namespace FGenConsole
 
 		public async Task SendTestRequestsAsync()
 		{
-			string eStr = "2.718281828459045235360287471352662498";
+			//string eStr = "2.718281828459045235360287471352662498";
 
-			Dd ddE = new Dd(eStr);
+			//Dd ddE = new Dd(eStr);
 
-			string s = ddE.GetStringVal();
+			//string s = ddE.GetStringVal();
 
-			Dd temp = new Dd(2.056789e-12);
-			string s2 = temp.GetStringVal();
+			//Dd temp = new Dd(2.056789e-12);
+			//string s2 = temp.GetStringVal();
 
 			// Wait for 2 seconds before beginning.
 			await Task.Delay(2 * 1000);
@@ -530,6 +530,7 @@ namespace FGenConsole
 
 				outQ.Send(CreateJobRequest(0));
 
+				//outQ.Send(CreateJobRequestSimple(0));
 				//await Task.Delay(2 * 1000);
 				//outQ.Send(CreateJobRequestOV(1));
 
@@ -552,10 +553,13 @@ namespace FGenConsole
 				jobId,
 				"simple",
 				FJobRequestType.Generate,
-				new Coords("-2", "1", "-1", "1"),
-				new RectangleInt(new PointInt(0, 0), new MqMessages.SizeInt(1, 1)),
+				//new Coords("-2", "1", "-1", "1"),
+				//new Coords("-1.3", "-1.0", "0.5", "0.7"),
+				new Coords("0.03", "0.06", "0.05", "0.07"),
+
+				new RectangleInt(new PointInt(0, 0), new SizeInt(1, 1)),
 				new SizeInt(100, 100),
-				300);
+				50);
 
 			return result;
 		}
@@ -572,9 +576,9 @@ namespace FGenConsole
 				"hiRez16test",
 				FJobRequestType.Generate,
 				new Coords(sx, ex, sy, ey),
-				new RectangleInt(new PointInt(10, 0), new MqMessages.SizeInt(10, 7)),
-				new SizeInt(10800, 7200),
-				4000); 
+				new RectangleInt(new PointInt(0, 0), new MqMessages.SizeInt(9, 6)),
+				new SizeInt(12600, 8400),
+				7000); 
 
 			return result;
 		}

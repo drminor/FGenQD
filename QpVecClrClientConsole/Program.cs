@@ -41,13 +41,38 @@ namespace QpVecClrClientConsole
 			FGenJob fjob = CreateJob();
 			FGenerator fGenerator = new FGenerator(fjob);
 
-			for (int j = 0; j < 100; j++)
-			{
-				System.Diagnostics.Debug.WriteLine($"y: {j}:");
+			int size = 10000;
+			uint[] counts = new uint[size];
+			double[] zVals = new double[size * 4];
+			bool[] doneFlags = new bool[size];
 
-				UInt32[] counts = fGenerator.GetXCounts(j);
+			for (int i = 0; i < counts.Length; i++)
+			{
+				counts[i] = 0;
 			}
+
+			for (int i = 0; i < doneFlags.Length; i++)
+			{
+				doneFlags[i] = false;
+			}
+
+			for (int i = 0; i < zVals.Length; i++)
+			{
+				zVals[i] = 0;
+			}
+
+			PointInt pos = new PointInt(0, 0);
+
+			fGenerator.FillCounts(pos, ref counts, ref doneFlags, ref zVals);
+
+			//for (int j = 0; j < 100; j++)
+			//{
+			//	System.Diagnostics.Debug.WriteLine($"y: {j}:");
+
+			//	UInt32[] counts = fGenerator.GetXCounts(j);
+			//}
 		}
+
 
 		private static FGenJob CreateJob()
 		{
