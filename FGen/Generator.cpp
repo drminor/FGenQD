@@ -2,6 +2,7 @@
 
 #include "FGen.h"
 #include "qpMath.h"
+#include "qpMathVec.h"
 
 #include <iostream>
 //#include <limits>
@@ -33,124 +34,124 @@ namespace FGen
 		return m_Job;
 	};
 
-	std::vector<unsigned int>Generator::GetCounts()
-	{
-		int xSamples = m_Job.SamplePoints().W();
-		int ySamples = m_Job.SamplePoints().H();
+	//std::vector<unsigned int>Generator::GetCounts()
+	//{
+	//	int xSamples = m_Job.SamplePoints().W();
+	//	int ySamples = m_Job.SamplePoints().H();
 
-		int tSamples = xSamples * ySamples;
-		std::vector<unsigned int> result; 
-		//std::vector<unsigned short> result(tSamples);
+	//	int tSamples = xSamples * ySamples;
+	//	std::vector<unsigned int> result; 
+	//	//std::vector<unsigned short> result(tSamples);
 
-		result.reserve(tSamples);
+	//	result.reserve(tSamples);
 
-		int rPtr = 0;
-		for (int j = 0; j < ySamples; j++) {
-			qp yCord = m_YPoints[j];
-			for (int i = 0; i < xSamples; i++) {
-				qp xCord = m_XPoints[i];
-				PointDd c = PointDd(xCord, yCord);
-				//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
-				bool done = false;
-				PointDd z = PointDd(0, 0);
+	//	int rPtr = 0;
+	//	for (int j = 0; j < ySamples; j++) {
+	//		qp yCord = m_YPoints[j];
+	//		for (int i = 0; i < xSamples; i++) {
+	//			qp xCord = m_XPoints[i];
+	//			PointDd c = PointDd(xCord, yCord);
+	//			//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
+	//			bool done = false;
+	//			PointDd z = PointDd(0, 0);
 
-				result.push_back(Generator::GetCount(c, m_targetIterationCount, 0, &done, &z));
-			}
-		}
+	//			result.push_back(Generator::GetCount(c, m_targetIterationCount, 0, &done, &z));
+	//		}
+	//	}
 
-		result.resize(tSamples);
+	//	result.resize(tSamples);
 
-		return result;
-	}
+	//	return result;
+	//}
 
-	std::vector<unsigned int> Generator::GetXCounts(int yPtr)
-	{
-		std::vector<unsigned int> result;
+	//std::vector<unsigned int> Generator::GetXCounts(int yPtr)
+	//{
+	//	std::vector<unsigned int> result;
 
-		int xSamples = m_Job.SamplePoints().W();
-		result.reserve(xSamples);
+	//	int xSamples = m_Job.SamplePoints().W();
+	//	result.reserve(xSamples);
 
-		qp yCord = m_YPoints[yPtr];
-		for (int i = 0; i < xSamples; i++) {
-			qp xCord = m_XPoints[i];
-			PointDd c = PointDd(xCord, yCord);
-			bool done = false;
-			PointDd z = PointDd(0, 0);
-			result.push_back(Generator::GetCount(c, m_targetIterationCount, 0, &done, &z));
-		}
+	//	qp yCord = m_YPoints[yPtr];
+	//	for (int i = 0; i < xSamples; i++) {
+	//		qp xCord = m_XPoints[i];
+	//		PointDd c = PointDd(xCord, yCord);
+	//		bool done = false;
+	//		PointDd z = PointDd(0, 0);
+	//		result.push_back(Generator::GetCount(c, m_targetIterationCount, 0, &done, &z));
+	//	}
 
-		result.resize(xSamples);
+	//	result.resize(xSamples);
 
-		return result;
-	}
+	//	return result;
+	//}
 
-	void Generator::FillCounts(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues)
-	{
-		int startX = pos.X() * BLOCK_WIDTH;
-		int startY = pos.Y() * BLOCK_HEIGHT;
+	//void Generator::FillCounts(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues)
+	//{
+	//	int startX = pos.X() * BLOCK_WIDTH;
+	//	int startY = pos.Y() * BLOCK_HEIGHT;
 
-		int resultPtr = 0;
-		for (int j = 0; j < FGen::BLOCK_HEIGHT; j++) {
-			
-			qp yCord = m_YPoints[startY + j];
+	//	int resultPtr = 0;
+	//	for (int j = 0; j < FGen::BLOCK_HEIGHT; j++) {
+	//		
+	//		qp yCord = m_YPoints[startY + j];
 
-			for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-				qp xCord = m_XPoints[startX + i];
-				PointDd c = PointDd(xCord, yCord);
+	//		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+	//			qp xCord = m_XPoints[startX + i];
+	//			PointDd c = PointDd(xCord, yCord);
 
-				PointDd z = GetPointDd(&zValues[resultPtr * 4]);
-				counts[resultPtr] = Generator::GetCount(c, m_targetIterationCount, counts[resultPtr], &doneFlags[resultPtr], &z);
-				PointDdToDoubleArray(z, &zValues[resultPtr * 4]);
+	//			PointDd z = GetPointDd(&zValues[resultPtr * 4]);
+	//			counts[resultPtr] = Generator::GetCount(c, m_targetIterationCount, counts[resultPtr], &doneFlags[resultPtr], &z);
+	//			PointDdToDoubleArray(z, &zValues[resultPtr * 4]);
 
-				resultPtr++;
-			}
-		}
-	}
+	//			resultPtr++;
+	//		}
+	//	}
+	//}
 
-	void Generator::FillXCounts(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
-	{
-		int startX = pos.X() * BLOCK_WIDTH;
-		int startY = pos.Y() * BLOCK_HEIGHT;
+	//void Generator::FillXCounts(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
+	//{
+	//	int startX = pos.X() * BLOCK_WIDTH;
+	//	int startY = pos.Y() * BLOCK_HEIGHT;
 
-		int resultPtr = yPtr * BLOCK_WIDTH;
+	//	int resultPtr = yPtr * BLOCK_WIDTH;
 
-		qp yCord = m_YPoints[startY + yPtr];
+	//	qp yCord = m_YPoints[startY + yPtr];
 
-		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-			qp xCord = m_XPoints[startX + i];
-			PointDd c = PointDd(xCord, yCord);
+	//	for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+	//		qp xCord = m_XPoints[startX + i];
+	//		PointDd c = PointDd(xCord, yCord);
 
-			PointDd z = GetPointDd(&zValues[resultPtr * 4]);
-			counts[resultPtr] = Generator::GetCount(c, m_targetIterationCount, counts[resultPtr], &doneFlags[resultPtr], &z);
-			PointDdToDoubleArray(z, &zValues[resultPtr * 4]);
+	//		PointDd z = GetPointDd(&zValues[resultPtr * 4]);
+	//		counts[resultPtr] = Generator::GetCount(c, m_targetIterationCount, counts[resultPtr], &doneFlags[resultPtr], &z);
+	//		PointDdToDoubleArray(z, &zValues[resultPtr * 4]);
 
-			resultPtr++;
-		}
-	}
+	//		resultPtr++;
+	//	}
+	//}
 
-	void Generator::FillXCounts2(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
-	{
-		qp xSquared = qp(0);
-		qp ySquared = qp(0);
-		int startX = pos.X() * BLOCK_WIDTH;
-		int startY = pos.Y() * BLOCK_HEIGHT;
+	//void Generator::FillXCounts2(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
+	//{
+	//	qp xSquared = qp(0);
+	//	qp ySquared = qp(0);
+	//	int startX = pos.X() * BLOCK_WIDTH;
+	//	int startY = pos.Y() * BLOCK_HEIGHT;
 
-		int resultPtr = yPtr * BLOCK_WIDTH;
+	//	int resultPtr = yPtr * BLOCK_WIDTH;
 
-		qp yCord = m_YPoints[startY + yPtr];
+	//	qp yCord = m_YPoints[startY + yPtr];
 
-		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-			qp xCord = m_XPoints[startX + i];
-			counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
-			resultPtr++;
-		}
+	//	for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+	//		qp xCord = m_XPoints[startX + i];
+	//		counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
+	//		resultPtr++;
+	//	}
 
-		for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-			qp xCord = m_XPoints[startX + i];
-			counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
-			resultPtr++;
-		}
-	}
+	//	for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
+	//		qp xCord = m_XPoints[startX + i];
+	//		counts[resultPtr] = Generator::GetCount2(xCord, yCord, &zValues[resultPtr * 4], counts[resultPtr], &doneFlags[resultPtr], xSquared, ySquared);
+	//		resultPtr++;
+	//	}
+	//}
 
 	void Generator::FillCountsVec(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues)
 	{
@@ -331,78 +332,78 @@ namespace FGen
 		zValues[3] = z.Y()._lo();
 	}
 
-	unsigned int Generator::GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal) {
+	//unsigned int Generator::GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal) {
 
-		qp cX = c.X();
-		qp cY = c.Y();
+	//	qp cX = c.X();
+	//	qp cY = c.Y();
 
-		qp zX = curVal->X();
-		qp zY = curVal->Y();
+	//	qp zX = curVal->X();
+	//	qp zY = curVal->Y();
 
-		qp xSquared = qp();
-		qp ySquared = qp();
+	//	qp xSquared = qp();
+	//	qp ySquared = qp();
 
-		double escapeVel = 0;
-		//unsigned int cntr;
-		//cntr /= 10000;
-		cntr = 0;
-		for (; cntr < maxIterations; cntr++) {
-			zY = 2 * zX * zY + cY;
-			zX = xSquared - ySquared + cX;
-			xSquared = zX * zX;
-			ySquared = zY * zY;
+	//	double escapeVel = 0;
+	//	//unsigned int cntr;
+	//	//cntr /= 10000;
+	//	cntr = 0;
+	//	for (; cntr < maxIterations; cntr++) {
+	//		zY = 2 * zX * zY + cY;
+	//		zX = xSquared - ySquared + cX;
+	//		xSquared = zX * zX;
+	//		ySquared = zY * zY;
 
-			if ((xSquared + ySquared) > 4) {
-				//escapeVel = GetEscapeVelocity(cX, cY, zX, zY, xSquared, ySquared);
-				*done = true;
-				break;
-			}
-		}
+	//		if ((xSquared + ySquared) > 4) {
+	//			//escapeVel = GetEscapeVelocity(cX, cY, zX, zY, xSquared, ySquared);
+	//			*done = true;
+	//			break;
+	//		}
+	//	}
 
-		*curVal = PointDd(zX, zY);
+	//	*curVal = PointDd(zX, zY);
 
-		double both = cntr + escapeVel;
-		both = std::round(10000 * both);
+	//	double both = cntr + escapeVel;
+	//	both = std::round(10000 * both);
 
-		return int(both);
-	}
+	//	return int(both);
+	//}
 
-	unsigned int Generator::GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared)
-	{
-		qp zX = qp(curZ[0], curZ[1]);
-		qp zY = qp(curZ[2], curZ[3]);
+	//unsigned int Generator::GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared)
+	//{
+	//	qp zX = qp(curZ[0], curZ[1]);
+	//	qp zY = qp(curZ[2], curZ[3]);
 
-		xSquared.resetToZero();
-		ySquared.resetToZero();
+	//	xSquared.resetToZero();
+	//	ySquared.resetToZero();
 
-		double escapeVel = 0;
-		//unsigned int cntr;
-		//cntr /= 10000;
-		cntr = 0;
-		for (; cntr < m_targetIterationCount; cntr++) {
-			zY = 2 * zX * zY + cY;
-			zX = xSquared - ySquared + cX;
-			xSquared = zX * zX;
-			ySquared = zY * zY;
+	//	double escapeVel = 0;
+	//	//unsigned int cntr;
+	//	//cntr /= 10000;
+	//	cntr = 0;
+	//	for (; cntr < m_targetIterationCount; cntr++) {
+	//		zY = 2 * zX * zY + cY;
+	//		zX = xSquared - ySquared + cX;
+	//		xSquared = zX * zX;
+	//		ySquared = zY * zY;
 
-			if ((xSquared + ySquared) > 4) {
+	//		if ((xSquared + ySquared) > 4) {
 
-				//escapeVel = GetEscapeVelocity(cX, cY, zX, zY, xSquared, ySquared);
-				*done = true;
-				break;
-			}
-		}
+	//			//escapeVel = GetEscapeVelocity(cX, cY, zX, zY, xSquared, ySquared);
+	//			*done = true;
+	//			break;
+	//		}
+	//	}
 
-		curZ[0] = zX._hi();
-		curZ[1] = zX._lo();
-		curZ[2] = zY._hi();
-		curZ[3] = zY._lo();
+	//	curZ[0] = zX._hi();
+	//	curZ[1] = zX._lo();
+	//	curZ[2] = zY._hi();
+	//	curZ[3] = zY._lo();
 
-		double both = cntr + escapeVel;
-		both = std::round(10000 * both);
+	//	double both = cntr + escapeVel;
+	//	both = std::round(10000 * both);
 
-		return int(both);
-	}
+	//	return int(both);
+	//}
 
 
 	//public double Iterate(DPoint c, ref DPoint z, ref int cntr, out bool done)
@@ -435,103 +436,103 @@ namespace FGen
 
 	double Generator::GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared) {
 
-		int cntr;
-		for (cntr = 0; cntr < 2; cntr++) {
-			zY = 2 * zX * zY + cY;
-			zX = xSquared - ySquared + cX;
-			xSquared = zX * zX;
-			ySquared = zY * zY;
-		}
+		//int cntr;
+		//for (cntr = 0; cntr < 2; cntr++) {
+		//	zY = 2 * zX * zY + cY;
+		//	zX = xSquared - ySquared + cX;
+		//	xSquared = zX * zX;
+		//	ySquared = zY * zY;
+		//}
 
-		qp ev = xSquared + ySquared;
-		double evd = ev.toDouble();
+		//qp ev = xSquared + ySquared;
+		//double evd = ev.toDouble();
 
-		double modulus = std::log10(evd) / 2;
-	    double nu = std::log10(modulus / m_Log2) / m_Log2;
-		nu /= 4;
+		//double modulus = std::log10(evd) / 2;
+	 //   double nu = std::log10(modulus / m_Log2) / m_Log2;
+		//nu /= 4;
 
-		if (nu > 1) {
-			std::cout << "Nu has a value of " << nu << ", using 1 instead.";
-			nu = 1;
-		}
+		//if (nu > 1) {
+		//	std::cout << "Nu has a value of " << nu << ", using 1 instead.";
+		//	nu = 1;
+		//}
 
-	    double result = 1 - nu;
-
+	 //   double result = 1 - nu;
+		double result = 0.0;
 	    return result;
 	}
 
-	std::vector<float> Generator::GetCountsF()
-	{
-		int xSamples = m_Job.SamplePoints().W();
-		int ySamples = m_Job.SamplePoints().H();
+	//std::vector<float> Generator::GetCountsF()
+	//{
+	//	int xSamples = m_Job.SamplePoints().W();
+	//	int ySamples = m_Job.SamplePoints().H();
 
-		int tSamples = xSamples * ySamples;
-		std::vector<float> result;
-		//std::vector<unsigned short> result(tSamples);
+	//	int tSamples = xSamples * ySamples;
+	//	std::vector<float> result;
+	//	//std::vector<unsigned short> result(tSamples);
 
-		result.reserve(tSamples);
+	//	result.reserve(tSamples);
 
-		int rPtr = 0;
-		for (int j = 0; j < ySamples; j++) {
-			qp yCord = m_YPoints[j];
-			for (int i = 0; i < xSamples; i++) {
-				qp xCord = m_XPoints[i];
-				PointDd c = PointDd(xCord, yCord);
-				//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
-				result.push_back(Generator::GetCountF(c, m_targetIterationCount));
-			}
-		}
+	//	int rPtr = 0;
+	//	for (int j = 0; j < ySamples; j++) {
+	//		qp yCord = m_YPoints[j];
+	//		for (int i = 0; i < xSamples; i++) {
+	//			qp xCord = m_XPoints[i];
+	//			PointDd c = PointDd(xCord, yCord);
+	//			//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
+	//			result.push_back(Generator::GetCountF(c, m_targetIterationCount));
+	//		}
+	//	}
 
-		result.resize(tSamples);
+	//	result.resize(tSamples);
 
-		return result;
-	}
+	//	return result;
+	//}
 
-	std::vector<float> Generator::GetXCountsF(int yPtr)
-	{
-		std::vector<float> result;
+	//std::vector<float> Generator::GetXCountsF(int yPtr)
+	//{
+	//	std::vector<float> result;
 
-		int xSamples = m_Job.SamplePoints().W();
-		result.reserve(xSamples);
+	//	int xSamples = m_Job.SamplePoints().W();
+	//	result.reserve(xSamples);
 
-		qp yCord = m_YPoints[yPtr];
-		for (int i = 0; i < xSamples; i++) {
-			qp xCord = m_XPoints[i];
-			PointDd c = PointDd(xCord, yCord);
-			result.push_back(Generator::GetCountF(c, m_targetIterationCount));
-		}
+	//	qp yCord = m_YPoints[yPtr];
+	//	for (int i = 0; i < xSamples; i++) {
+	//		qp xCord = m_XPoints[i];
+	//		PointDd c = PointDd(xCord, yCord);
+	//		result.push_back(Generator::GetCountF(c, m_targetIterationCount));
+	//	}
 
-		result.resize(xSamples);
+	//	result.resize(xSamples);
 
-		return result;
-	}
+	//	return result;
+	//}
 
-	float Generator::GetCountF(PointDd c, int maxIterations) {
+	//float Generator::GetCountF(PointDd c, int maxIterations) {
 
-		qp cX = c.X();
-		qp cY = c.Y();
+	//	qp cX = c.X();
+	//	qp cY = c.Y();
 
-		qp zX = qp();
-		qp zY = qp();
+	//	qp zX = qp();
+	//	qp zY = qp();
 
-		qp xSquared = qp();
-		qp ySquared = qp();
-		int cntr;
-		for (cntr = 0; cntr < maxIterations; cntr++) {
-			zY = 2 * zX * zY + cY;
-			zX = xSquared - ySquared + cX;
-			xSquared = zX * zX;
-			ySquared = zY * zY;
+	//	qp xSquared = qp();
+	//	qp ySquared = qp();
+	//	int cntr;
+	//	for (cntr = 0; cntr < maxIterations; cntr++) {
+	//		zY = 2 * zX * zY + cY;
+	//		zX = xSquared - ySquared + cX;
+	//		xSquared = zX * zX;
+	//		ySquared = zY * zY;
 
-			if ((xSquared + ySquared) > 4) {
-				//escapeVelocity = GetEscapeVelocity(_z, c, _xSquared, _ySquared);
-				break;
-			}
-		}
+	//		if ((xSquared + ySquared) > 4) {
+	//			//escapeVelocity = GetEscapeVelocity(_z, c, _xSquared, _ySquared);
+	//			break;
+	//		}
+	//	}
 
-		float result = 0.0F + cntr;
-		return result;
-	}
+	//	float result = 0.0F + cntr;
+	//	return result;
+	//}
 
 	qp* Generator::GetXPoints()
 	{
@@ -571,12 +572,9 @@ namespace FGen
 		qp* result = new qp[width];
 
 		qpMath * qpCalc = new qpMath();
-		qp diff = qpCalc->getDiff(endC, startC);
 
-		double * diff_his = new double[width];
-		double * diff_los = new double[width];
-		double * temp_his = new double[width];
-		double * temp_los = new double[width];
+		//qp diff = qpCalc->getDiff(endC, startC);
+		qp diff = qpCalc->sub(endC, startC);
 
 		double * rats = new double[sampleCnt];
 
@@ -586,14 +584,18 @@ namespace FGen
 			rats[rPtr++] = (double)i / (double)sampleCnt;
 		}
 
-		qpMath * qpVecCalc = new qpMath(width);
+		qpMathVec * qpVecCalc = new qpMathVec(width);
 
+		double * diff_his = new double[width];
+		double * diff_los = new double[width];
 		qpVecCalc->extendSingleQp(diff, diff_his, diff_los);
+
+		double * temp_his = new double[width];
+		double * temp_los = new double[width];
 		qpVecCalc->mulQpByD(diff_his, diff_los, rats, temp_his, temp_los);
 
 		double * startC_his = new double[width];
 		double * startC_los = new double[width];
-
 		qpVecCalc->extendSingleQp(startC, startC_his, startC_los);
 
 		qpVecCalc->addQps(temp_his, temp_los, startC_his, startC_los, diff_his, diff_los);

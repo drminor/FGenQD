@@ -198,7 +198,7 @@ namespace FGenConsole
 						//}
 						//break;
 
-						if (FillCountsForBlock2(subJob, ct, out TimeSpan elasped2))
+						if (FillCountsForBlock(subJob, ct, out TimeSpan elasped2))
 						{
 							subJob.SubJobResult.IterationCount = targetIterations;
 							subJob.ParentJob.WriteWorkResult(subJob, overwriteResults: false);
@@ -219,7 +219,7 @@ namespace FGenConsole
 
 						// Use the current work results to continue calculations to create
 						// a result with the target iteration count.
-						if (FillCountsForBlock2(subJob, ct, out TimeSpan elasped2))
+						if (FillCountsForBlock(subJob, ct, out TimeSpan elasped2))
 						{
 							subJobResult.IterationCount = targetIterations;
 							subJob.ParentJob.WriteWorkResult(subJob, overwriteResults: true);
@@ -237,41 +237,41 @@ namespace FGenConsole
 			return true;
 		}
 
+		//private bool FillCountsForBlock_OLD(SubJob subJob, CancellationToken ct, out TimeSpan elasped)
+		//{
+		//	DateTime t0 = DateTime.Now;
+		//	try
+		//	{
+		//		SubJobResult subJobResult = subJob.SubJobResult;
+
+		//		uint[] counts = subJobResult.Counts;
+		//		bool[] doneFlags = subJobResult.DoneFlags;
+		//		double[] zValues = subJobResult.ZValues;
+
+		//		for (int yPtr = 0; yPtr < FGenerator.BLOCK_WIDTH; yPtr++)
+		//		{
+		//			if (ct.IsCancellationRequested || subJob.ParentJob.Closed) break;
+		//			subJob.ParentJob.FGenerator.FillXCounts(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
+		//			//subJob.ParentJob.FGenerator.FillXCountsTest(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
+		//		}
+
+		//		subJobResult.Counts = counts;
+		//		subJobResult.DoneFlags = doneFlags;
+		//		subJobResult.ZValues = zValues;
+		//		ReportElaspedTime(t0, $"Block: {subJob.Position}");
+
+		//		elasped = DateTime.Now - t0;
+
+		//		return !ct.IsCancellationRequested && !subJob.ParentJob.Closed;
+		//	}
+		//	catch (Exception e)
+		//	{
+		//		Debug.WriteLine($"Got exception while filling the XCounts. The error is {e.Message}.");
+		//		throw;
+		//	}
+		//}
+
 		private bool FillCountsForBlock(SubJob subJob, CancellationToken ct, out TimeSpan elasped)
-		{
-			DateTime t0 = DateTime.Now;
-			try
-			{
-				SubJobResult subJobResult = subJob.SubJobResult;
-
-				uint[] counts = subJobResult.Counts;
-				bool[] doneFlags = subJobResult.DoneFlags;
-				double[] zValues = subJobResult.ZValues;
-
-				for (int yPtr = 0; yPtr < FGenerator.BLOCK_WIDTH; yPtr++)
-				{
-					if (ct.IsCancellationRequested || subJob.ParentJob.Closed) break;
-					subJob.ParentJob.FGenerator.FillXCounts(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
-					//subJob.ParentJob.FGenerator.FillXCountsTest(subJob.Position.GetPointInt(), ref counts, ref doneFlags, ref zValues, yPtr);
-				}
-
-				subJobResult.Counts = counts;
-				subJobResult.DoneFlags = doneFlags;
-				subJobResult.ZValues = zValues;
-				ReportElaspedTime(t0, $"Block: {subJob.Position}");
-
-				elasped = DateTime.Now - t0;
-
-				return !ct.IsCancellationRequested && !subJob.ParentJob.Closed;
-			}
-			catch (Exception e)
-			{
-				Debug.WriteLine($"Got exception while filling the XCounts. The error is {e.Message}.");
-				throw;
-			}
-		}
-
-		private bool FillCountsForBlock2(SubJob subJob, CancellationToken ct, out TimeSpan elasped)
 		{
 			DateTime t0 = DateTime.Now;
 			try

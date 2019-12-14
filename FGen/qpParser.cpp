@@ -10,7 +10,7 @@
 #include <limits>
 #include <cmath>
 
-#include "../QPVec/vHelper.h"
+//#include "../QPVec/vHelper.h"
 #include "qpParser.h"
 #include "qpMath.h"
 
@@ -18,17 +18,11 @@ namespace FGen
 {
 	qpParser::qpParser()
 	{
-		_len = 1;
-
 		_qpCalc = new qpMath();
-		_vhelper = new vHelper();
-		_two = _vhelper->createAndInitVec(_len, 2.0);
 	}
 
 	qpParser::~qpParser()
 	{
-		delete _vhelper;
-		delete[] _two;
 		delete _qpCalc;
 		_qpCalc = 0;
 	}
@@ -228,7 +222,7 @@ namespace FGen
 
 			sHi2 = hi;
 			sLo2 = 0;
-			_qpCalc->sqrQp(&sHi2, &sLo2, &sHi, &sLo);
+			_qpCalc->sqrQp(sHi2, sLo2, sHi, sLo);
 			break;
 
 		default:							/* Use binary exponentiation */
@@ -248,7 +242,7 @@ namespace FGen
 				if (N % 2 == 1)
 				{
 					//s *= r;
-					_qpCalc->mulQpByQpS(sHi, sLo, tHi, tLo, sHi2, sLo2);
+					_qpCalc->mulQpByQp(sHi, sLo, tHi, tLo, sHi2, sLo2);
 					sHi = sHi2;
 					sLo = sLo2;
 				}
@@ -256,7 +250,7 @@ namespace FGen
 				if (N > 0)
 				{
 					//r = sqr(r);
-					_qpCalc->sqrQp(&tHi, &tLo, &tHi2, &tLo2);
+					_qpCalc->sqrQp(tHi, tLo, tHi2, tLo2);
 					tHi = tHi2;
 					tLo = tLo2;
 				}
@@ -281,7 +275,7 @@ namespace FGen
 		double rhi;
 		double rlo;
 
-		_qpCalc->mulQpByQpS(ahi, alo, bhi, blo, rhi, rlo);
+		_qpCalc->mulQpByQp(ahi, alo, bhi, blo, rhi, rlo);
 
 		ahi = rhi;
 		alo = rlo;
@@ -295,7 +289,7 @@ namespace FGen
 		//double t = 0;
 		//_qpCalc->mulQpByQpS(ahi, alo, b, t, rhi, rlo);
 
-		_qpCalc->mulQpByDS(ahi, alo, b, rhi, rlo);
+		_qpCalc->mulQpByD(ahi, alo, b, rhi, rlo);
 
 		ahi = rhi;
 		alo = rlo;
@@ -305,7 +299,7 @@ namespace FGen
 	{
 		double rhi;
 		double rlo;
-		_qpCalc->addDToQpsS(ahi, alo, b, rhi, rlo);
+		_qpCalc->addDToQp(ahi, alo, b, rhi, rlo);
 
 		ahi = rhi;
 		alo = rlo;
@@ -315,7 +309,9 @@ namespace FGen
 	{
 		double rhi;
 		double rlo;
-		_qpCalc->subDFromQps(&ahi, &alo, &b, &rhi, &rlo);
+		//_qpCalc->subDFromQps(&ahi, &alo, &b, &rhi, &rlo);
+
+		_qpCalc->addDToQp(ahi, alo, -b, rhi, rlo);
 
 		ahi = rhi;
 		alo = rlo;
@@ -349,11 +345,11 @@ namespace FGen
 		double rHi = hi;
 		double rLo = lo;
 
-		std::string * shis = new std::string[50];
-		std::string * slos = new std::string[50];
+		//std::string * shis = new std::string[50];
+		//std::string * slos = new std::string[50];
 
-		std::string * shis2 = new std::string[50];
-		std::string * slos2 = new std::string[50];
+		//std::string * shis2 = new std::string[50];
+		//std::string * slos2 = new std::string[50];
 
 		//dd_real r = std::abs(*this);
 		if (hi < 0) {
@@ -469,13 +465,13 @@ namespace FGen
 			//r -= d;
 			AddDToQpInPlace(rHi, rLo, -d);
 			//SubDFromQpInPlace(rHi, rLo, d);
-			shis[i] = GetStr(rHi);
-			slos[i] = GetStr(rLo);
+			//shis[i] = GetStr(rHi);
+			//slos[i] = GetStr(rLo);
 
 			//r *= 10.0;
 			MulQpByDInPlace(rHi, rLo, 10.0);
-			shis2[i] = GetStr(rHi);
-			slos2[i] = GetStr(rLo);
+			//shis2[i] = GetStr(rHi);
+			//slos2[i] = GetStr(rLo);
 		
 			s[i] = static_cast<char>(d + '0');
 		}

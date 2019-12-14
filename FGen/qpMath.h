@@ -8,9 +8,6 @@
 #endif
 
 #include "qp.h"
-#include "../QPVec/qpvec.h"
-
-using namespace qpvec;
 
 namespace FGen
 {
@@ -19,70 +16,41 @@ namespace FGen
 
 	public:
 		qpMath();
-		qpMath(int len);
 
-		qp getDiff(qp end, qp start);
+		//qp getDiff(qp end, qp start);
+		qp sub(qp a, qp b);
+		qp add(qp a, qp b);
 
-		void addQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
-		void subQps(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
-
-		void addDToQps(double * ahis, double * alos, double * b, double * rhis, double * rlos);
-		void addDToQpsS(double ahi, double alo, double b, double &rhi, double &rlo);
-
-		void subDFromQps(double * ahis, double * alos, double * b, double * rhis, double * rlos);
-
-		void mulQpByD(double * his, double * los, double * f, double * rhis, double * rlos);
-		void mulQpByDS(double hi, double lo, double f, double &rhi, double &rlo);
+		qp mulD(qp a, double b);
 
 
-		void mulQpByQp(double * ahis, double * alos, double * bhis, double * blos, double * rhis, double * rlos);
-		void mulQpByQpS(double ahis, double alos, double bhis, double blos, double &rhis, double &rlos);
+		void addQpAndQp(double ahis, double alos, double bhis, double blos, double &rhis, double &rlos);
 
+		void addDToQp(double ahi, double alo, double b, double &rhi, double &rlo);
 
-		void sqrQp(double * ahis, double * alos, double * rhis, double * rlos);
+		void mulQpByD(double hi, double lo, double f, double &rhi, double &rlo);
+
+		void mulQpByQp(double ahis, double alos, double bhis, double blos, double &rhis, double &rlos);
+
+		void sqrQp(double ahi, double alo, double &rhi, double &rlo);
 
 		void mulQpByQpROp(double ahi, double alo, double bhi, double blo, double * r);
 		void addOpAndQp(double const* a, double bhi, double blo, double * s);
 		void renorm(double &c0, double &c1, double &c2, double &c3, double &c4);
 
 		double two_sum(double a, double b, double &err);
+		double quick_two_sum(double a, double b, double & err);
 
+		void three_sum(double &a, double &b, double &c);
 		void three_sum2(double &a, double &b, double c);
 
 		double two_prod(double a, double b, double &err);
+		double two_sqr(double a, double &err);
 
 		void split(double a, double &hi, double &lo);
 
-		void extendSingleQp(qp val, double * his, double * los);
-		void clearVec(double * his, double * los);
-
-		void fillQpVector(double * his, double * los, qp * result);
-
-		int GetBlockWidth()
-		{
-			return _len;
-		}
-
-
 		~qpMath();
 
-	private:
-		int _len;
-		twoSum * _twoSum;
-		twoProd * _twoProd;
-
-		double * _t1;
-
-		double * _e1;
-		double * _e2;
-		double * _e3;
-
-		double * _p1;
-		double * _p2;
-		double * _p3;
-		double * _two;
-
-		void initWorkingVectors();
 
 	};
 

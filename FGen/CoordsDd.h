@@ -50,20 +50,20 @@ namespace FGen
 			return end.Y();
 		};
 
-		inline qp Width() const
-		{
-			//TODO: Fix qp substraction
-			//return end.X() - start.X();
-			return qp(end.X()._hi() - start.X()._hi());
-		};
+		//inline qp Width() const
+		//{
+		//	//TODO: Fix qp substraction
+		//	//return end.X() - start.X();
+		//	return qp(end.X()._hi() - start.X()._hi());
+		//};
 
-		inline qp Height() const
-		{
-			//TODO: Fix qp substraction
-			//return end.Y() - start.Y();
-			return qp(end.Y()._hi() - start.Y()._hi());
+		//inline qp Height() const
+		//{
+		//	//TODO: Fix qp substraction
+		//	//return end.Y() - start.Y();
+		//	return qp(end.Y()._hi() - start.Y()._hi());
 
-		};
+		//};
 
 
 		~CoordsDd();

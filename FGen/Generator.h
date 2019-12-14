@@ -29,19 +29,19 @@ namespace FGen
 
 		Job GetJob();
 
-		std::vector<unsigned int> GetCounts();
-		std::vector<unsigned int> GetXCounts(int yPtr);
+		//std::vector<unsigned int> GetCounts();
+		//std::vector<unsigned int> GetXCounts(int yPtr);
 
-		void FillCounts(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues);
+		//void FillCounts(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues);
 		void FillCountsVec(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues);
 
-		void FillXCounts(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
-		void FillXCounts2(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
+		//void FillXCounts(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
+		//void FillXCounts2(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
 
 		void FillXCountsTest(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
 
-		std::vector<float> GetCountsF();
-		std::vector<float>	GetXCountsF(int yPtr);
+		//std::vector<float> GetCountsF();
+		//std::vector<float>	GetXCountsF(int yPtr);
 
 		~Generator();
 
@@ -65,15 +65,15 @@ namespace FGen
 
 		qp * GetPoints(int sampleCnt, int width, int areaStart, int areaEnd, qp startC, qp diff);
 
-		unsigned int GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal);
-		unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
+		//unsigned int GetCount(PointDd c, unsigned int maxIterations, unsigned int cntr, bool * done, PointDd * curVal);
+		//unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
 
 		bool QpGreaterThan(double hi, double lo, double comp);
 		bool FillDoneSlot(int index, GenPt &genPt, PointInt &curCoordIndex, int startX, int startY);
 		void SaveCnt(int index, GenPt &genPt, bool done, unsigned int * counts, bool * doneFlags, double * zValues);
 		PointInt GetNextCoordIndex(PointInt cur, bool &more);
 
-		float GetCountF(PointDd c, int maxIterations);
+		//float GetCountF(PointDd c, int maxIterations);
 
 		double GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared);
 		PointDd GetPointDd(double * zValues);

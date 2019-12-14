@@ -72,7 +72,7 @@ namespace qdDotNetTests
 		{
 			FGenJob fjob = CreateJob();
 			FGenerator fGenerator = new FGenerator(fjob);
-			UInt32[] counts = fGenerator.GetCounts();
+			//UInt32[] counts = fGenerator.GetCounts();
 
 			//int ptr = 0;
 
@@ -93,12 +93,12 @@ namespace qdDotNetTests
 			FGenJob fjob = CreateJob();
 			FGenerator fGenerator = new FGenerator(fjob);
 
-			for (int j = 0; j < 100; j++)
-			{
-				System.Diagnostics.Debug.WriteLine($"y: {j}:");
+			//for (int j = 0; j < 100; j++)
+			//{
+			//	System.Diagnostics.Debug.WriteLine($"y: {j}:");
 
-				UInt32[] counts = fGenerator.GetXCounts(j);
-			}
+			//	UInt32[] counts = fGenerator.GetXCounts(j);
+			//}
 		}
 
 		private FGenJob CreateJob()

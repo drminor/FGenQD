@@ -6,7 +6,7 @@
 
 namespace FGen
 {
-	class qpMath;
+	class qpMathVec;
 
 	class FGenMath
 	{
@@ -22,7 +22,7 @@ namespace FGen
 	private:
 		int _len;
 		qpvec::vHelper * _vhelper;
-		qpMath * _qpCalc;
+		qpMathVec * _qpCalc;
 
 		double * _two;
 		//double * _four;

@@ -63,6 +63,9 @@
     <ClInclude Include="qpParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="qpMathVec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -105,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="qpParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qpMathVec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

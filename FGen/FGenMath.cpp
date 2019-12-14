@@ -2,11 +2,11 @@
 
 #include "../QPVec/vHelper.h"
 #include "FGenMath.h"
-#include "qpMath.h"
+#include "qpMathVec.h"
 
 namespace FGen
 {
-	FGenMath::FGenMath(int len) : _qpCalc(new qpMath(len))
+	FGenMath::FGenMath(int len) : _qpCalc(new qpMathVec(len))
 	{
 		_len = len;
 

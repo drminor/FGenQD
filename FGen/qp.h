@@ -51,84 +51,81 @@ namespace FGen
 		}
 
 		qp(std::string const& s);
-		//std::string toHexString();
 
 		~qp();
 
-		int read(std::string const & s, qp & a);
+		//int read(std::string const & s, qp & a);
 
 
 	private:
 		double x[2];
 
-		//double GetMantissa(double x, int &sign, int &exp);
-
 	};
 
 
-	inline bool operator>(qp const& a, double b)
-	{
-		return a._hi() > b;
-	}
+	//inline bool operator>(qp const& a, double b)
+	//{
+	//	return a._hi() > b;
+	//}
 
-	inline qp operator+(qp const& a, qp const& b)
-	{
-		return qp(a._hi() + b._hi());
-	}
+	//inline qp operator+(qp const& a, qp const& b)
+	//{
+	//	return qp(a._hi() + b._hi());
+	//}
 
-	inline qp operator+(qp const& a, double b)
-	{
-		return qp(a._hi() + b);
-	}
+	//inline qp operator+(qp const& a, double b)
+	//{
+	//	return qp(a._hi() + b);
+	//}
 
-	inline qp operator+(double a, qp const& b)
-	{
-		return qp(a + b._hi());
-	}
+	//inline qp operator+(double a, qp const& b)
+	//{
+	//	return qp(a + b._hi());
+	//}
 
-	inline qp operator-(qp const& a, qp const& b)
-	{
-		return qp(a._hi() - b._hi());
-	}
+	//inline qp operator-(qp const& a, qp const& b)
+	//{
+	//	return qp(a._hi() - b._hi());
+	//}
 
-	inline qp operator-(qp const& a, double b)
-	{
-		return qp(a._hi() - b);
-	}
+	//inline qp operator-(qp const& a, double b)
+	//{
+	//	return qp(a._hi() - b);
+	//}
 
-	inline qp operator-(double a, qp const& b)
-	{
-		return qp(a - b._hi());
-	}
+	//inline qp operator-(double a, qp const& b)
+	//{
+	//	return qp(a - b._hi());
+	//}
 
-	inline qp operator*(qp const& a, qp const& b)
-	{
-		return qp(a._hi() * b._hi());
-	}
+	//inline qp operator*(qp const& a, qp const& b)
+	//{
+	//	return qp(a._hi() * b._hi());
+	//}
 
-	inline qp operator*(qp const& a, double b)
-	{
-		return qp(a._hi() * b);
-	}
+	//inline qp operator*(qp const& a, double b)
+	//{
+	//	return qp(a._hi() * b);
+	//}
 
-	inline qp operator*(double a, qp const& b)
-	{
-		return qp(a * b._hi());
-	}
+	//inline qp operator*(double a, qp const& b)
+	//{
+	//	return qp(a * b._hi());
+	//}
 
-	inline qp operator/(qp const& a, qp const& b)
-	{
-		return qp(a._hi() / b._hi());
-	}
+	//inline qp operator/(qp const& a, qp const& b)
+	//{
+	//	return qp(a._hi() / b._hi());
+	//}
 
-	inline qp operator/(qp const& a, double b)
-	{
-		return qp(a._hi() / b);
-	}
+	//inline qp operator/(qp const& a, double b)
+	//{
+	//	return qp(a._hi() / b);
+	//}
 
-	inline qp operator/(double a, qp const& b)
-	{
-		return qp(a / b._hi());
-	}
+	//inline qp operator/(double a, qp const& b)
+	//{
+	//	return qp(a / b._hi());
+	//}
 }
 

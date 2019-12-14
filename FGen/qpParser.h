@@ -1,13 +1,8 @@
 #pragma once
 
-//#include <cmath>
-//#include <iostream>
-//#include <limits>
 #include <string>
 
-#include "../QPVec/vHelper.h"
 #include "qp.h"
-#include "GenPt.h"
 
 namespace FGen
 {
@@ -28,11 +23,7 @@ namespace FGen
 
 
 	private:
-		int _len;
-		qpvec::vHelper * _vhelper;
 		qpMath * _qpCalc;
-
-		double * _two;
 
 		void error(std::string const& msg) const;
 
