@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "FGen.h"
 
-
 namespace FGen
 {
 	CoordsDd::CoordsDd()

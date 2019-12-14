@@ -21,7 +21,6 @@ namespace FGen
 
 		std::string GetStr(double x) const;
 
-
 	private:
 		qpMath * _qpCalc;
 
@@ -41,9 +40,7 @@ namespace FGen
 		void AddDToQpInPlace(double &ahi, double &alo, double b) const;
 		void SubDFromQpInPlace(double &ahi, double &alo, double b) const;
 		
-		//void Pown(double const &hi, double const &lo, int n, double &rHi, double &rLo);
 		void Pown(double hi, int n, double &rHi, double &rLo) const;
-
 
 		bool geD(double &ahi, double &alo, double b) const;
 		bool ltD(double &ahi, double &alo, double b) const;
@@ -51,7 +48,6 @@ namespace FGen
 
 		void to_digits(char* s, int& expn, int precision, double hi, double lo) const;
 		void append_expn(std::string& str, int expn) const;
-
 	};
 }
 

@@ -17,19 +17,15 @@ namespace FGen
 	public:
 		qpMath();
 
-		//qp getDiff(qp end, qp start);
 		qp sub(qp a, qp b);
 		qp add(qp a, qp b);
 
 		qp mulD(qp a, double b);
 
-
 		void addQpAndQp(double ahis, double alos, double bhis, double blos, double &rhis, double &rlos);
-
 		void addDToQp(double ahi, double alo, double b, double &rhi, double &rlo);
 
 		void mulQpByD(double hi, double lo, double f, double &rhi, double &rlo);
-
 		void mulQpByQp(double ahis, double alos, double bhis, double blos, double &rhis, double &rlos);
 
 		void sqrQp(double ahi, double alo, double &rhi, double &rlo);
@@ -50,9 +46,6 @@ namespace FGen
 		void split(double a, double &hi, double &lo);
 
 		~qpMath();
-
-
 	};
-
 }
 

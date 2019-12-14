@@ -8,26 +8,6 @@
 namespace qpvec
 {
 
-	//double twoProd::two_prod(double a, double b, double& err)
-	//{
-	//	double p = a * b;
-	//	if (!isinf(p))
-	//	{
-	//		double a_hi, a_lo, b_hi, b_lo;
-
-	//		split(a, a_hi, a_lo);
-	//		split(b, b_hi, b_lo);
-
-	//		err = ((a_hi * b_hi - p) + a_hi * b_lo + a_lo * b_hi) + a_lo * b_lo;
-	//	}
-	//	else
-	//	{
-	//		err = 0.0;
-	//	}
-
-	//	return p;
-	//}
-
 	void twoProd::two_prodA(double *a, double *b, double *p, double *err)
 	{
 		//double p = a * b;

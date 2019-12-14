@@ -44,8 +44,6 @@ namespace FGen
 
 		qp(double hi, double lo)
 		{
-			//x[0] = qd::two_sum(hi, lo, x[1]);
-			//TODO: Fix Me
 			x[0] = hi;
 			x[1] = lo;
 		}
@@ -54,78 +52,10 @@ namespace FGen
 
 		~qp();
 
-		//int read(std::string const & s, qp & a);
-
-
 	private:
 		double x[2];
 
 	};
 
-
-	//inline bool operator>(qp const& a, double b)
-	//{
-	//	return a._hi() > b;
-	//}
-
-	//inline qp operator+(qp const& a, qp const& b)
-	//{
-	//	return qp(a._hi() + b._hi());
-	//}
-
-	//inline qp operator+(qp const& a, double b)
-	//{
-	//	return qp(a._hi() + b);
-	//}
-
-	//inline qp operator+(double a, qp const& b)
-	//{
-	//	return qp(a + b._hi());
-	//}
-
-	//inline qp operator-(qp const& a, qp const& b)
-	//{
-	//	return qp(a._hi() - b._hi());
-	//}
-
-	//inline qp operator-(qp const& a, double b)
-	//{
-	//	return qp(a._hi() - b);
-	//}
-
-	//inline qp operator-(double a, qp const& b)
-	//{
-	//	return qp(a - b._hi());
-	//}
-
-	//inline qp operator*(qp const& a, qp const& b)
-	//{
-	//	return qp(a._hi() * b._hi());
-	//}
-
-	//inline qp operator*(qp const& a, double b)
-	//{
-	//	return qp(a._hi() * b);
-	//}
-
-	//inline qp operator*(double a, qp const& b)
-	//{
-	//	return qp(a * b._hi());
-	//}
-
-	//inline qp operator/(qp const& a, qp const& b)
-	//{
-	//	return qp(a._hi() / b._hi());
-	//}
-
-	//inline qp operator/(qp const& a, double b)
-	//{
-	//	return qp(a._hi() / b);
-	//}
-
-	//inline qp operator/(double a, qp const& b)
-	//{
-	//	return qp(a / b._hi());
-	//}
 }
 

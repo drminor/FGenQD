@@ -15,17 +15,13 @@ namespace FGen
 		~FGenMath();
 
 		void Iterate(GenPt &genPt);
-
 		void extendSingleQp(qp val, double * his, double * los);
-
 
 	private:
 		int _len;
 		qpvec::vHelper * _vhelper;
 		qpMathVec * _qpCalc;
-
 		double * _two;
-		//double * _four;
 	};
 }
 

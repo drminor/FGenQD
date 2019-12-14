@@ -6,8 +6,6 @@
 #define FGEN_API __declspec(dllimport)
 #endif
 
-//#include <qd/dd_real.h>
-
 #include "qp.h"
 #include "PointDd.h"
 
@@ -49,22 +47,6 @@ namespace FGen
 		{
 			return end.Y();
 		};
-
-		//inline qp Width() const
-		//{
-		//	//TODO: Fix qp substraction
-		//	//return end.X() - start.X();
-		//	return qp(end.X()._hi() - start.X()._hi());
-		//};
-
-		//inline qp Height() const
-		//{
-		//	//TODO: Fix qp substraction
-		//	//return end.Y() - start.Y();
-		//	return qp(end.Y()._hi() - start.Y()._hi());
-
-		//};
-
 
 		~CoordsDd();
 

@@ -40,9 +40,6 @@ namespace FGen
 
 		void FillXCountsTest(PointInt pos, unsigned int* counts, bool * doneFlags, double * zValues, int yPtr);
 
-		//std::vector<float> GetCountsF();
-		//std::vector<float>	GetXCountsF(int yPtr);
-
 		~Generator();
 
 	private:
@@ -52,13 +49,6 @@ namespace FGen
 		qp* m_XPoints;
 		qp* m_YPoints;
 		double m_Log2;
-
-		//FGenMath * m_FGenMath;
-
-		//double * _cxCordHis;
-		//double * _cxCordLos;
-		//double * _cyCordHis;
-		//double * _cyCordLos;
 
 		qp * GetXPoints();
 		qp * GetYPoints();
@@ -73,12 +63,9 @@ namespace FGen
 		void SaveCnt(int index, GenPt &genPt, bool done, unsigned int * counts, bool * doneFlags, double * zValues);
 		PointInt GetNextCoordIndex(PointInt cur, bool &more);
 
-		//float GetCountF(PointDd c, int maxIterations);
-
 		double GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared);
 		PointDd GetPointDd(double * zValues);
 		void PointDdToDoubleArray(PointDd z, double * zValues);
-
 
 	};
 

@@ -12,8 +12,6 @@ namespace FGen
 
 		_vhelper = new vHelper();
 		_two = _vhelper->createAndInitVec(_len, 2.0);
-		//_four = _vhelper->createAndInitVec(_len, 4.0);
-
 	}
 
 	FGenMath::~FGenMath()

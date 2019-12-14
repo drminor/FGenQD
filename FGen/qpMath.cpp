@@ -68,48 +68,6 @@ namespace FGen
 		//}
 	}
 
-	//qp qpMath::getDiff(qp end, qp start)
-	//{
-	//	double aHi = end._hi();
-	//	double aLo = end._lo();
-	//
-	//	double bHi = start._hi();
-	//	double bLo = start._lo();
-	//
-	//	//_twoSum->two_diffA(&aHi, &bHi, &s1, &s2);
-	//	double s2; double s1 = two_sum(aHi, -bHi, s2);
-	//
-	//	//_twoSum->two_diffA(&aLo, &bLo, &t1, &t2);
-	//	double t2; double t1 = two_sum(aLo, -bLo, t2);
-	//
-	//	//_twoSum->two_sumA(&s2, &t1, &aLo, &t3);
-	//	double t4; double t3 = two_sum(s2, t1, t4);
-	//
-	//	t4 += t2;
-	//	//_twoSum->three_sum(&s1, &aLo, &t3);
-	//	three_sum2(s1, t3, t4);
-	//
-	//	return qp(s1, t3);
-	//
-	//	//dd_real& operator-=(dd_real const& b)
-	//	//{
-	//	//	double s2;
-	//	//	x[0] = qd::two_sum(x[0], -b.x[0], s2);
-	//	//	if (QD_ISFINITE(x[0]))
-	//	//	{
-	//	//		double t2, t1 = qd::two_sum(x[1], -b.x[1], t2);
-	//	//		x[1] = qd::two_sum(s2, t1, t1);
-	//	//		t1 += t2;
-	//	//		qd::three_sum(x[0], x[1], t1);
-	//	//	}
-	//	//	else
-	//	//	{
-	//	//		x[1] = 0.0;
-	//	//	}
-	//	//	return *this;
-	//	//}
-	//}
-
 	void qpMath::addDToQp(double ahi, double alo, double b, double &rhi, double &rlo)
 	{
 		//_twoSum->two_sumA(ahis, b, rhis, _e1);

@@ -1,6 +1,5 @@
 #pragma once
 
-//#include <qd/dd_real.h>
 #include "../FGen/FGen.h"
 
 using namespace System;

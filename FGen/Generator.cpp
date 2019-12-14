@@ -1,12 +1,9 @@
 #include "stdafx.h"
+#include <iostream>
 
 #include "FGen.h"
 #include "qpMath.h"
 #include "qpMathVec.h"
-
-#include <iostream>
-//#include <limits>
-//#include <string>
 
 namespace FGen
 {
@@ -460,79 +457,6 @@ namespace FGen
 		double result = 0.0;
 	    return result;
 	}
-
-	//std::vector<float> Generator::GetCountsF()
-	//{
-	//	int xSamples = m_Job.SamplePoints().W();
-	//	int ySamples = m_Job.SamplePoints().H();
-
-	//	int tSamples = xSamples * ySamples;
-	//	std::vector<float> result;
-	//	//std::vector<unsigned short> result(tSamples);
-
-	//	result.reserve(tSamples);
-
-	//	int rPtr = 0;
-	//	for (int j = 0; j < ySamples; j++) {
-	//		qp yCord = m_YPoints[j];
-	//		for (int i = 0; i < xSamples; i++) {
-	//			qp xCord = m_XPoints[i];
-	//			PointDd c = PointDd(xCord, yCord);
-	//			//result[rPtr++] = Generator::GetCount(c, m_Job.MaxIterations());
-	//			result.push_back(Generator::GetCountF(c, m_targetIterationCount));
-	//		}
-	//	}
-
-	//	result.resize(tSamples);
-
-	//	return result;
-	//}
-
-	//std::vector<float> Generator::GetXCountsF(int yPtr)
-	//{
-	//	std::vector<float> result;
-
-	//	int xSamples = m_Job.SamplePoints().W();
-	//	result.reserve(xSamples);
-
-	//	qp yCord = m_YPoints[yPtr];
-	//	for (int i = 0; i < xSamples; i++) {
-	//		qp xCord = m_XPoints[i];
-	//		PointDd c = PointDd(xCord, yCord);
-	//		result.push_back(Generator::GetCountF(c, m_targetIterationCount));
-	//	}
-
-	//	result.resize(xSamples);
-
-	//	return result;
-	//}
-
-	//float Generator::GetCountF(PointDd c, int maxIterations) {
-
-	//	qp cX = c.X();
-	//	qp cY = c.Y();
-
-	//	qp zX = qp();
-	//	qp zY = qp();
-
-	//	qp xSquared = qp();
-	//	qp ySquared = qp();
-	//	int cntr;
-	//	for (cntr = 0; cntr < maxIterations; cntr++) {
-	//		zY = 2 * zX * zY + cY;
-	//		zX = xSquared - ySquared + cX;
-	//		xSquared = zX * zX;
-	//		ySquared = zY * zY;
-
-	//		if ((xSquared + ySquared) > 4) {
-	//			//escapeVelocity = GetEscapeVelocity(_z, c, _xSquared, _ySquared);
-	//			break;
-	//		}
-	//	}
-
-	//	float result = 0.0F + cntr;
-	//	return result;
-	//}
 
 	qp* Generator::GetXPoints()
 	{

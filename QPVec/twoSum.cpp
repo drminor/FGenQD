@@ -7,32 +7,6 @@
 namespace qpvec
 {
 
-	//double twoSum::two_sum(double a, double b, double& err)
-	//{
-	//	//double s = a + b;
-	//	//if (QD_ISFINITE(s))
-	//	//{
-	//	//	double bb = s - a;
-	//	//	err = (a - (s - bb)) + (b - bb);
-	//	//}
-	//	//else
-	//	//	err = 0;
-	//	//return s;
-
-	//	double s = a + b;
-
-	//	double bb = s - a;
-	//	double bbb = b - bb;
-	//	double sbb = s - bb;
-
-	//	double asbb = a - sbb;
-
-	//	double err2 = asbb + bbb;
-
-	//	err = (a - (s - bb)) + (b - bb);
-	//	return s;
-	//}
-
 	void twoSum::two_sumA(double *a, double *b, double *s, double* err)
 	{
 		//double s = a + b;

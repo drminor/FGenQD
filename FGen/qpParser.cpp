@@ -10,7 +10,6 @@
 #include <limits>
 #include <cmath>
 
-//#include "../QPVec/vHelper.h"
 #include "qpParser.h"
 #include "qpMath.h"
 
@@ -73,7 +72,7 @@ namespace FGen
 	//{
 	//	static_assert(numeric_limits< dd_real >::radix == 2, "CONFIGURATION: dd_real radix must be 2!");
 	//	static_assert(numeric_limits< double >::radix == 2, "CONFIGURATION: double radix must be 2!");
-
+	//
 	//	return dd_real(std::ldexp(a._hi(), exp), std::ldexp(a._lo(), exp));
 	//}
 
@@ -286,9 +285,6 @@ namespace FGen
 		double rhi;
 		double rlo;
 
-		//double t = 0;
-		//_qpCalc->mulQpByQpS(ahi, alo, b, t, rhi, rlo);
-
 		_qpCalc->mulQpByD(ahi, alo, b, rhi, rlo);
 
 		ahi = rhi;
@@ -309,7 +305,6 @@ namespace FGen
 	{
 		double rhi;
 		double rlo;
-		//_qpCalc->subDFromQps(&ahi, &alo, &b, &rhi, &rlo);
 
 		_qpCalc->addDToQp(ahi, alo, -b, rhi, rlo);
 
@@ -1139,7 +1134,6 @@ namespace FGen
 				Pown(10, e, mxHi, mxLo);
 				MulQpByQpInPlace(hi, lo, mxHi, mxLo);
 			}
-
 	
 		//a = (sign == -1) ? -r : r;
 		if (sign == -1) {

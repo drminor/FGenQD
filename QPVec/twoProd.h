@@ -9,7 +9,6 @@ namespace qpvec
 	{
 	public:
 
-		//double two_prod(double a, double b, double& err);
 		void two_prodA(double *a, double *b, double *p, double *err);
 		void two_sqrA(double *a, double *p, double *err);
 
