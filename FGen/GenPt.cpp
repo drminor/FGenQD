@@ -1,9 +1,64 @@
 #include "stdafx.h"
 #include "GenPt.h"
 
-
 namespace FGen
 {
+	GenPt::GenPt(int blockWidth)
+	{
+		_blockWidth = blockWidth;
+
+		_cnt = new int[blockWidth];
+
+		_cxCordHis = new double[blockWidth];
+		_cxCordLos = new double[blockWidth];
+		_cyCordHis = new double[blockWidth];
+		_cyCordLos = new double[blockWidth];
+
+		_resultIndexes = new PointInt[blockWidth];
+
+		_zxCordHis = new double[blockWidth];
+		_zxCordLos = new double[blockWidth];
+		_zyCordHis = new double[blockWidth];
+		_zyCordLos = new double[blockWidth];
+
+		_xsCordHis = new double[blockWidth];
+		_xsCordLos = new double[blockWidth];
+		_ysCordHis = new double[blockWidth];
+		_ysCordLos = new double[blockWidth];
+
+		_sumSqsHis = new double[blockWidth];
+		_sumSqsLos = new double[blockWidth];
+
+		_rCordHis = new double[blockWidth];
+		_rCordLos = new double[blockWidth];
+
+		for (int i = 0; i < blockWidth; i++) {
+			_cnt[i] = 0;
+
+			_cxCordHis[i] = 0;
+			_cxCordLos[i] = 0;
+			_cyCordHis[i] = 0;
+			_cyCordLos[i] = 0;
+
+			_zxCordHis[i] = 0;
+			_zxCordLos[i] = 0;
+			_zyCordHis[i] = 0;
+			_zyCordLos[i] = 0;
+
+			_xsCordHis[i] = 0;
+			_xsCordLos[i] = 0;
+			_ysCordHis[i] = 0;
+			_ysCordLos[i] = 0;
+
+			_sumSqsHis[i] = 0;
+			_sumSqsLos[i] = 0;
+			_resultIndexes[i] = PointInt();
+
+			_rCordHis[i] = 0;
+			_rCordLos[i] = 0;
+		}
+	}
+
 	GenPt::GenPt(int blockWidth, double * cxCordHis, double * cxCordLos, double * cyCordHis, double * cyCordLos)
 	{
 		_blockWidth = blockWidth;
@@ -56,7 +111,7 @@ namespace FGen
 		}
 	}
 
-	void GenPt::SetC(qp x, qp y, int index, PointInt resultIndex)
+	void GenPt::SetC(int index, qp x, qp y, PointInt resultIndex)
 	{
 		_cxCordHis[index] = x._hi();
 		_cxCordLos[index] = x._lo();

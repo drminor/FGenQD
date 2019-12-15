@@ -171,6 +171,7 @@ xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\FGenConsole\bin\Debug"</Command
     <ClInclude Include="FGenMath.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="GenPt.h" />
+    <ClInclude Include="GenWorkVals.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="PointDd.h" />
     <ClInclude Include="PointInt.h" />
@@ -189,6 +190,7 @@ xcopy /y /d "$(OutDir)FGen.dll" "$(ProjectDir)..\FGenConsole\bin\Debug"</Command
     <ClCompile Include="FGenMath.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="GenPt.cpp" />
+    <ClCompile Include="GenWorkVals.cpp" />
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="PointDd.cpp" />
     <ClCompile Include="PointInt.cpp" />

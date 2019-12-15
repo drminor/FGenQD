@@ -12,12 +12,13 @@ namespace FGen
 	{
 
 	public:
+		GenPt(int blockWidth);
+
 		GenPt(int blockWidth, double * cxCordHis, double * cxCordLos, double * cyCordHis, double * cyCordLos);
 
 		~GenPt();
 
-		void SetC(qp x, qp y, int index, PointInt resultIndex);
-		//void SetCX(qp val, int index, PointInt resultIndex);
+		void SetC(int index, qp x, qp y, PointInt resultIndex);
 		void Clear(int index);
 		void SetEmpty(int index);
 		bool IsEmpty(int index);

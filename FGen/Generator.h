@@ -59,9 +59,13 @@ namespace FGen
 		//unsigned int GetCount2(qp cX, qp cY, double * curZ, unsigned int cntr, bool * done, qp xSquared, qp ySquared);
 
 		bool QpGreaterThan(double hi, double lo, double comp);
-		bool FillDoneSlot(int index, GenPt &genPt, PointInt &curCoordIndex, int startX, int startY);
-		void SaveCnt(int index, GenPt &genPt, bool done, unsigned int * counts, bool * doneFlags, double * zValues);
-		PointInt GetNextCoordIndex(PointInt cur, bool &more);
+		//void SaveCnt(int index, GenPt genPt, bool done, unsigned int * counts, bool * doneFlags, double * zValues);
+
+		//bool FillDoneSlot(int index, GenPt genPt, PointInt &curCoordIndex, bool &morePts, int startX, int startY,
+		//	unsigned int * counts, bool * doneFlags, double * zValues);
+
+		////bool GetNextWorkIndex(PointInt &cur, bool &morePts, unsigned int * counts, bool * doneFlags);
+		//PointInt GetNextCoordIndex(PointInt cur, bool &morePts);
 
 		double GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared);
 		PointDd GetPointDd(double * zValues);

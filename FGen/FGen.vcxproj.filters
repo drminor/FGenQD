@@ -66,6 +66,9 @@
     <ClInclude Include="qpMathVec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GenWorkVals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="qpMathVec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenWorkVals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
