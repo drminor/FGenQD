@@ -40,25 +40,8 @@ namespace FGen
 		FGenMath * fgenCalc = new FGenMath(BLOCK_WIDTH);
 
 		GenWorkVals * workVals = new GenWorkVals(BLOCK_WIDTH, BLOCK_HEIGHT, m_targetIterationCount, counts, doneFlags, zValues);
-
-		//double * cxCordHis = new double[BLOCK_WIDTH];
-		//double * cxCordLos = new double[BLOCK_WIDTH];
-		//double * cyCordHis = new double[BLOCK_WIDTH];
-		//double * cyCordLos = new double[BLOCK_WIDTH];
-
-		//qp yCord = m_YPoints[startY];
-		//fgenCalc->extendSingleQp(yCord, cyCordHis, cyCordLos);
-
-		//for (int i = 0; i < FGen::BLOCK_WIDTH; i++) {
-		//	qp xCord = m_XPoints[startX + i];
-		//	cxCordHis[i] = xCord._hi();
-		//	cxCordLos[i] = xCord._lo();
-		//}
-
-		//GenPt * genPt = new GenPt(BLOCK_WIDTH, cxCordHis, cxCordLos, cyCordHis, cyCordLos);
-		//PointInt curCoordIndex = PointInt(BLOCK_WIDTH - 1, 0); // last column of row 0
-
 		GenPt * genPt = new GenPt(BLOCK_WIDTH);
+
 		PointInt curCoordIndex = PointInt(0, 0); 
 		unsigned int count;
 		double * zValsBuf = new double[4];
@@ -70,7 +53,10 @@ namespace FGen
 				qp cY = m_YPoints[startY + curCoordIndex.Y()];
 				qp cX = m_XPoints[startX + curCoordIndex.X()];
 
-				genPt->SetC(i,  cX, cY, curCoordIndex);
+				qp zX = qp(zValsBuf[0], zValsBuf[1]);
+				qp zY = qp(zValsBuf[2], zValsBuf[3]);
+
+				genPt->SetC(i, curCoordIndex, cX, cY, zX, zY);
 			}
 		}
 
@@ -85,14 +71,8 @@ namespace FGen
 			{
 				if (genPt->IsEmpty(i)) continue;
 
-				//double ss = genPt->_sumSqsHis[i];
 				if (QpGreaterThan(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i], 4.0)) {
 
-					//// Save the results
-					//int yPtr = genPt->_resultIndexes[i].Y();
-					//int xPtr = genPt->_resultIndexes[i].X();
-
-					//SaveCnt(i, *genPt, true, counts, doneFlags, zValues);
 					zValsBuf[0] = genPt->_zxCordHis[i];
 					zValsBuf[1] = genPt->_zxCordLos[i + 1];
 					zValsBuf[2] = genPt->_zyCordHis[i + 2];
@@ -101,20 +81,16 @@ namespace FGen
 					double escapeVel = 0.0;
 
 					workVals->SaveWorkValues(genPt->_resultIndexes[i], genPt->_cnt[i], escapeVel, zValsBuf, true);
-
-					//if (FillDoneSlot(i, *genPt, curCoordIndex, morePts, startX, startY, counts, doneFlags, zValues))
-					//{
-					//	//int yPtr2 = genPt->_resultIndexes[i].Y();
-					//	//int xPtr2 = genPt->_resultIndexes[i].X();
-
-					//	complete = false;
-					//}
 					morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
 					if (morePts) {
 						qp cY = m_YPoints[startY + curCoordIndex.Y()];
 						qp cX = m_XPoints[startX + curCoordIndex.X()];
 
-						genPt->SetC(i, cX, cY, curCoordIndex);
+						qp zX = qp(zValsBuf[0], zValsBuf[1]);
+						qp zY = qp(zValsBuf[2], zValsBuf[3]);
+
+						genPt->SetC(i, curCoordIndex, cX, cY, zX, zY);
+
 						complete = false;
 					}
 					else {
@@ -125,7 +101,6 @@ namespace FGen
 					genPt->_cnt[i]++;
 					if (genPt->_cnt[i] == m_targetIterationCount) {
 
-						//SaveCnt(i, *genPt, false, counts, doneFlags, zValues);
 						zValsBuf[0] = genPt->_zxCordHis[i];
 						zValsBuf[1] = genPt->_zxCordLos[i + 1];
 						zValsBuf[2] = genPt->_zyCordHis[i + 2];
@@ -135,16 +110,15 @@ namespace FGen
 
 						workVals->SaveWorkValues(genPt->_resultIndexes[i], genPt->_cnt[i], escapeVel, zValsBuf, false);
 
-						//if (FillDoneSlot(i, *genPt, curCoordIndex, morePts, startX, startY, counts, doneFlags, zValues))
-						//{
-						//	complete = false;
-						//}
 						morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
 						if (morePts) {
 							qp cY = m_YPoints[startY + curCoordIndex.Y()];
 							qp cX = m_XPoints[startX + curCoordIndex.X()];
 
-							genPt->SetC(i, cX, cY, curCoordIndex);
+							qp zX = qp(zValsBuf[0], zValsBuf[1]);
+							qp zY = qp(zValsBuf[2], zValsBuf[3]);
+
+							genPt->SetC(i, curCoordIndex, cX, cY, zX, zY);
 							complete = false;
 						}
 						else {
@@ -162,7 +136,6 @@ namespace FGen
 		delete workVals;
 		delete genPt;
 		delete[] zValsBuf;
-		//delete[] cxCordHis, cxCordLos, cyCordHis, cyCordLos;
 	}
 
 	bool Generator::QpGreaterThan(double hi, double lo, double comp)
@@ -175,50 +148,6 @@ namespace FGen
 		//	return (_hi() < b) || ((_hi() == b) && (_lo() <= 0.0));
 		//}
 	}
-
-	//void Generator::SaveCnt(int index, GenPt genPt, bool isDone, unsigned int * counts, bool * doneFlags, double * zValues)
-	//{
-	//	int resultPtr = genPt._resultIndexes[index].Y() * BLOCK_WIDTH + genPt._resultIndexes[index].X();
-	//	counts[resultPtr] = 10000 * genPt._cnt[index];
-	//	doneFlags[resultPtr] = isDone;
-	//}
-
-	//bool Generator::FillDoneSlot(int index, GenPt genPt, PointInt &curCoordIndex, bool &morePts, int startX, int startY,
-	//	unsigned int * counts, bool * doneFlags, double * zValues)
-	//{
-	//	// Get the next pt to include in the active vector
-	//	curCoordIndex = GetNextCoordIndex(curCoordIndex, morePts);
-
-	//	if (morePts) {
-	//		// Update the active vector with the new pt data.
-	//		qp cY = m_YPoints[startY + curCoordIndex.Y()];
-	//		qp cX = m_XPoints[startX + curCoordIndex.X()];
-	//		genPt.SetC(cX, cY, index, curCoordIndex);
-	//	}
-	//	else {
-	//		genPt.SetEmpty(index);
-	//	}
-
-	//	return morePts;
-	//}
-
-	//PointInt Generator::GetNextCoordIndex(PointInt cur, bool &morePts)
-	//{
-	//	if (cur.X() == BLOCK_WIDTH - 1) {
-	//		if (cur.Y() == BLOCK_HEIGHT - 1) {
-	//			morePts = false;
-	//			return cur;
-	//		}
-	//		else {
-	//			morePts = true;
-	//			return PointInt(0, cur.Y() + 1);
-	//		}
-	//	}
-	//	else {
-	//		morePts = true;
-	//		return PointInt(cur.X() + 1, cur.Y());
-	//	}
-	//}
 
 	void Generator::FillXCountsTest(PointInt pos, unsigned int * counts, bool * doneFlags, double * zValues, int yPtr)
 	{

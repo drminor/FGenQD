@@ -14,11 +14,9 @@ namespace FGen
 	public:
 		GenPt(int blockWidth);
 
-		GenPt(int blockWidth, double * cxCordHis, double * cxCordLos, double * cyCordHis, double * cyCordLos);
-
 		~GenPt();
 
-		void SetC(int index, qp x, qp y, PointInt resultIndex);
+		void SetC(int index, PointInt resultIndex, qp cx, qp cy, qp zx, qp zy);
 		void Clear(int index);
 		void SetEmpty(int index);
 		bool IsEmpty(int index);

@@ -35,15 +35,15 @@ namespace FGen
 		for (int i = 0; i < blockWidth; i++) {
 			_cnt[i] = 0;
 
-			_cxCordHis[i] = 0;
-			_cxCordLos[i] = 0;
-			_cyCordHis[i] = 0;
-			_cyCordLos[i] = 0;
+			//_cxCordHis[i] = 0;
+			//_cxCordLos[i] = 0;
+			//_cyCordHis[i] = 0;
+			//_cyCordLos[i] = 0;
 
-			_zxCordHis[i] = 0;
-			_zxCordLos[i] = 0;
-			_zyCordHis[i] = 0;
-			_zyCordLos[i] = 0;
+			//_zxCordHis[i] = 0;
+			//_zxCordLos[i] = 0;
+			//_zyCordHis[i] = 0;
+			//_zyCordLos[i] = 0;
 
 			_xsCordHis[i] = 0;
 			_xsCordLos[i] = 0;
@@ -59,64 +59,18 @@ namespace FGen
 		}
 	}
 
-	GenPt::GenPt(int blockWidth, double * cxCordHis, double * cxCordLos, double * cyCordHis, double * cyCordLos)
+	void GenPt::SetC(int index, PointInt resultIndex, qp cx, qp cy, qp zx, qp zy)
 	{
-		_blockWidth = blockWidth;
+		_cxCordHis[index] = cx._hi();
+		_cxCordLos[index] = cx._lo();
+		_cyCordHis[index] = cy._hi();
+		_cyCordLos[index] = cy._lo();
 
-		_cnt = new int[blockWidth];
+		_zxCordHis[index] = zx._hi();
+		_zxCordLos[index] = zx._lo();
+		_zyCordHis[index] = zy._hi();
+		_zyCordLos[index] = zy._lo();
 
-		_cxCordHis = cxCordHis;
-		_cxCordLos = cxCordLos;
-		_cyCordHis = cyCordHis;
-		_cyCordLos = cyCordLos;
-
-		_resultIndexes = new PointInt[blockWidth];
-
-		_zxCordHis = new double[blockWidth];
-		_zxCordLos = new double[blockWidth];
-		_zyCordHis = new double[blockWidth];
-		_zyCordLos = new double[blockWidth];
-
-		_xsCordHis = new double[blockWidth];
-		_xsCordLos = new double[blockWidth];
-		_ysCordHis = new double[blockWidth];
-		_ysCordLos = new double[blockWidth];
-
-		_sumSqsHis = new double[blockWidth];
-		_sumSqsLos = new double[blockWidth];
-
-		_rCordHis = new double[blockWidth];
-		_rCordLos = new double[blockWidth];
-
-
-		for (int i = 0; i < blockWidth; i++) {
-			_cnt[i] = 0;
-
-			_zxCordHis[i] = 0;
-			_zxCordLos[i] = 0;
-			_zyCordHis[i] = 0;
-			_zyCordLos[i] = 0;
-
-			_xsCordHis[i] = 0;
-			_xsCordLos[i] = 0;
-			_ysCordHis[i] = 0;
-			_ysCordLos[i] = 0;
-
-			_sumSqsHis[i] = 0;
-			_sumSqsLos[i] = 0;
-			_resultIndexes[i] = PointInt(i, 0);
-
-			_rCordHis[i] = 0;
-			_rCordLos[i] = 0;
-		}
-	}
-
-	void GenPt::SetC(int index, qp x, qp y, PointInt resultIndex)
-	{
-		_cxCordHis[index] = x._hi();
-		_cxCordLos[index] = x._lo();
-		_cyCordHis[index] = y._hi();
-		_cyCordLos[index] = y._lo();
 		_resultIndexes[index].SetXY(resultIndex.X(), resultIndex.Y());
 		Clear(index);
 	}
@@ -125,10 +79,10 @@ namespace FGen
 	{
 		_cnt[index] = 0;
 
-		_zxCordHis[index] = 0;
-		_zxCordLos[index] = 0;
-		_zyCordHis[index] = 0;
-		_zyCordLos[index] = 0;
+		//_zxCordHis[index] = 0;
+		//_zxCordLos[index] = 0;
+		//_zyCordHis[index] = 0;
+		//_zyCordLos[index] = 0;
 
 		_xsCordHis[index] = 0;
 		_xsCordLos[index] = 0;
@@ -137,6 +91,9 @@ namespace FGen
 
 		_sumSqsHis[index] = 0;
 		_sumSqsLos[index] = 0;
+
+		_rCordHis[i] = 0;
+		_rCordLos[i] = 0;
 	}
 
 	void GenPt::SetEmpty(int index)
