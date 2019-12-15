@@ -29,16 +29,11 @@ namespace FGen
 			return y;
 		};
 
-		inline PointDd Mul(PointDd val) {
-			return PointDd();
-		};
-
 		~PointDd();
 
 	private:
 		qp x;
 		qp y;
 	};
-
 }
 

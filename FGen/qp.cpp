@@ -11,10 +11,9 @@ namespace FGen {
 	qp::qp(std::string const& s)
 	{
 		qpParser parser = qpParser();
-		parser.Read(s, x[0], x[1]);
+		parser.Read(s, _hip, _lop);
 
-		//std::string result = parser.ToStr(x[0], x[1]);
-
+		//std::string result = parser.ToStr(_hip, _lop);
 	}
 
 	qp::~qp()
@@ -25,7 +24,7 @@ namespace FGen {
 	{
 		qpParser parser = qpParser();
 
-		std::string result = parser.ToStr(x[0], x[1]);
+		std::string result = parser.ToStr(_hip, _lop);
 		return result;
 	}
 

@@ -15,45 +15,67 @@ namespace FGen
 
 	public:
 
-		double _hi() const { return x[0]; }
-		double _lo() const { return x[1]; }
+		double _hi() const { return _hip; }
+		double _lo() const { return _lop; }
 
 		void resetToZero() {
-			x[0] = 0;
-			x[1] = 0;
+			_hip = 0;
+			_lop = 0;
 		}
 
 		double toDouble() const
 		{
-			return _hi() + _lo();
+			return _hip + _lop;
 		}
 
 		std::string to_string();
 
 		qp()
 		{
-			x[0] = 0.0;
-			x[1] = 0.0;
+			_hip = 0.0;
+			_lop = 0.0;
 		}
 
 		qp(double h)
 		{
-			x[0] = h;
-			x[1] = 0.0;
+			_hip = h;
+			_lop = 0.0;
 		}
 
 		qp(double hi, double lo)
 		{
-			x[0] = hi;
-			x[1] = lo;
+			_hip = hi;
+			_lop = lo;
 		}
 
 		qp(std::string const& s);
 
+		//qp(const qp &v)
+		//{
+		//	x = new double[2];
+		//	x[0] = v._hi();
+		//	x[1] = v._lo();
+		//}
+
+		//qp & operator=(const qp &L)
+		//{
+		//	// check for "self assignment" and do nothing in that case
+		//	if (this == &L) return *this;
+		//	else {
+		//		delete[] x;                // free the storage pointed to by Items
+		//		x = new double[2];
+		//		x[0] = L._hi();
+		//		x[1] = L._lo();
+
+		//		return *this;                   // return this IntList
+		//	}
+		//}
+
 		~qp();
 
 	private:
-		double x[2];
+		double _hip;
+		double _lop;
 
 	};
 
