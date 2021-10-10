@@ -15,6 +15,7 @@ namespace FGen
 		_cyCordLos = new double[blockWidth];
 
 		_resultIndexes = new PointInt[blockWidth];
+		_evIterationsRemaining = new int[blockWidth];
 
 		_zxCordHis = new double[blockWidth];
 		_zxCordLos = new double[blockWidth];
@@ -35,15 +36,15 @@ namespace FGen
 		for (int i = 0; i < blockWidth; i++) {
 			_cnt[i] = 0;
 
-			//_cxCordHis[i] = 0;
-			//_cxCordLos[i] = 0;
-			//_cyCordHis[i] = 0;
-			//_cyCordLos[i] = 0;
+			_cxCordHis[i] = 0;
+			_cxCordLos[i] = 0;
+			_cyCordHis[i] = 0;
+			_cyCordLos[i] = 0;
 
-			//_zxCordHis[i] = 0;
-			//_zxCordLos[i] = 0;
-			//_zyCordHis[i] = 0;
-			//_zyCordLos[i] = 0;
+			_zxCordHis[i] = 0;
+			_zxCordLos[i] = 0;
+			_zyCordHis[i] = 0;
+			_zyCordLos[i] = 0;
 
 			_xsCordHis[i] = 0;
 			_xsCordLos[i] = 0;
@@ -52,15 +53,18 @@ namespace FGen
 
 			_sumSqsHis[i] = 0;
 			_sumSqsLos[i] = 0;
+
 			_resultIndexes[i] = PointInt();
+			_evIterationsRemaining[i] = -1;
 
 			_rCordHis[i] = 0;
 			_rCordLos[i] = 0;
 		}
 	}
 
-	void GenPt::SetC(int index, PointInt resultIndex, qp cx, qp cy, qp zx, qp zy)
+	void GenPt::SetC(int index, PointInt resultIndex, qp cx, qp cy, qp zx, qp zy, unsigned int cnt)
 	{
+		_cnt[index] = cnt;
 		_cxCordHis[index] = cx._hi();
 		_cxCordLos[index] = cx._lo();
 		_cyCordHis[index] = cy._hi();
@@ -77,23 +81,18 @@ namespace FGen
 
 	void GenPt::Clear(int index)
 	{
-		_cnt[index] = 0;
-
-		//_zxCordHis[index] = 0;
-		//_zxCordLos[index] = 0;
-		//_zyCordHis[index] = 0;
-		//_zyCordLos[index] = 0;
+		_evIterationsRemaining[index] = -1;
 
 		_xsCordHis[index] = 0;
 		_xsCordLos[index] = 0;
 		_ysCordHis[index] = 0;
 		_ysCordLos[index] = 0;
 
-		_sumSqsHis[index] = 0;
+		_sumSqsHis[index] = -1;
 		_sumSqsLos[index] = 0;
 
-		_rCordHis[i] = 0;
-		_rCordLos[i] = 0;
+		_rCordHis[index] = 0;
+		_rCordLos[index] = 0;
 	}
 
 	void GenPt::SetEmpty(int index)
@@ -104,13 +103,32 @@ namespace FGen
 	bool GenPt::IsEmpty(int index)
 	{
 		return _resultIndexes[index].X() == -1;
-	}	
+	}
+
+	bool GenPt::IsEvIterationsRemainingZero(int index)
+	{
+		return _evIterationsRemaining[index] == 0;
+	}
+
+	void GenPt::SetEvIterationsRemaining(int index, int val)
+	{
+		_evIterationsRemaining[index] = val;
+	}
+
+	int GenPt::DecrementEvIterationsRemaining(int index)
+	{
+		int nv = _evIterationsRemaining[index] - 1;
+		_evIterationsRemaining[index] = nv;
+		return nv;
+	}
 
 	GenPt::~GenPt()
 	{
+		delete[] _cxCordHis, _cxCordLos, _cyCordHis, _cyCordLos;
 		delete[] _zxCordHis, _zxCordLos, _zyCordHis, _zyCordLos;
 		delete[] _xsCordHis, _xsCordLos, _ysCordHis, _ysCordLos;
-		delete[] _cnt, _resultIndexes, _sumSqsHis, _sumSqsLos;
+		delete[] _cnt, _sumSqsHis, _sumSqsLos;
+		delete[] _resultIndexes, _evIterationsRemaining;
 
 		delete[] _rCordHis, _rCordLos;
 

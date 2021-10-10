@@ -576,7 +576,7 @@ namespace FGenConsole
 				"hiRez16test",
 				FJobRequestType.Generate,
 				new Coords(sx, ex, sy, ey),
-				new RectangleInt(new PointInt(0, 0), new MqMessages.SizeInt(9, 6)),
+				new RectangleInt(new PointInt(10, 7), new MqMessages.SizeInt(9, 6)),
 				new SizeInt(12600, 8400),
 				7000); 
 

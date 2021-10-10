@@ -26,7 +26,8 @@ namespace FGen
 		bool IsCompleted();
 
 		bool GetNextWorkValues(PointInt &index, unsigned int &count, double * zValsBuf);
-		void SaveWorkValues(PointInt index, unsigned int count, double escapeVel, double * zValsBuf, bool doneFlag);
+		void SaveWorkValues(PointInt index, unsigned int count, double * zValsBuf, bool doneFlag);
+		void UpdateCntWithEV(PointInt index, double escapeVel);
 
 	private:
 		bool AdvanceCurPos();

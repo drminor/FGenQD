@@ -42,8 +42,10 @@ namespace FGen
 		if (needsWork) {
 			index = GetCurPos();
 			count = cntVal;
+
+			vPtr *= 4;
 			for (int i = 0; i < 4; i++) {
-				zValsBuf[i] = _zValues[vPtr * 4 + i];
+				zValsBuf[i] = _zValues[vPtr + i];
 			}
 
 			AdvanceCurPos();
@@ -54,14 +56,22 @@ namespace FGen
 		}
 	}
 
-	void GenWorkVals::SaveWorkValues(PointInt index, unsigned int count, double escapeVel, double * zValsBuf, bool doneFlag)
+	void GenWorkVals::SaveWorkValues(PointInt index, unsigned int count, double * zValsBuf, bool doneFlag)
 	{
 		int vPtr = index.Y() * _width + index.X();
 		_counts[vPtr] = 10000 * count;
 		_doneFlags[vPtr] = doneFlag;
+
+		vPtr *= 4;
 		for (int i = 0; i < 4; i++) {
-			_zValues[vPtr * 4 + i] = zValsBuf[i];
+			_zValues[vPtr + i] = zValsBuf[i];
 		}
+	}
+
+	void GenWorkVals::UpdateCntWithEV(PointInt index, double escapeVel)
+	{
+		int vPtr = index.Y() * _width + index.X();
+		_counts[vPtr] = _counts[vPtr] + static_cast<int>(escapeVel * 10000);
 	}
 
 	bool GenWorkVals::IsCompleted()

@@ -175,11 +175,15 @@ namespace FGenConsole
 
 		private double[] GetZValues(byte[] buf, int size)
 		{
-			double[] result = new double[size * 8];
+			int elementCnt = size * 4;
 
-			for (int i = 0; i < size; i++)
+			double[] result = new double[elementCnt];
+
+			int ptr = 0;
+			for (int i = 0; i < elementCnt; i++)
 			{
-				result[i] = BitConverter.ToDouble(buf, i * 8);
+				result[i] = BitConverter.ToDouble(buf, ptr);
+				ptr += 8;
 			}
 
 			return result;

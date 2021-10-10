@@ -41,6 +41,8 @@ namespace FGen
 
 		GenWorkVals * workVals = new GenWorkVals(BLOCK_WIDTH, BLOCK_HEIGHT, m_targetIterationCount, counts, doneFlags, zValues);
 		GenPt * genPt = new GenPt(BLOCK_WIDTH);
+		int genPtLen = 0;
+		int nullPtIterationOps = 0;
 
 		PointInt curCoordIndex = PointInt(0, 0); 
 		unsigned int count;
@@ -56,59 +58,34 @@ namespace FGen
 				qp zX = qp(zValsBuf[0], zValsBuf[1]);
 				qp zY = qp(zValsBuf[2], zValsBuf[3]);
 
-				genPt->SetC(i, curCoordIndex, cX, cY, zX, zY);
+				genPt->SetC(genPtLen++, curCoordIndex, cX, cY, zX, zY, count);
 			}
 		}
 
-		bool complete = false;
+		bool complete = genPtLen < 1;
+		bool haveNewEntries = true;
 
 		while (!complete)
 		{
+			if (genPtLen < 1) std::cout << "Not complete, but genPtLen is < 1.";
+			if (haveNewEntries) {
+				fgenCalc->InitialzeNewEntries(*genPt);
+				haveNewEntries = false;
+			}
+
 			fgenCalc->Iterate(*genPt);
+			nullPtIterationOps += (BLOCK_WIDTH - genPtLen);
 
 			complete = true;
 			for (int i = 0; i < BLOCK_WIDTH; i++)
 			{
 				if (genPt->IsEmpty(i)) continue;
 
-				if (QpGreaterThan(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i], 4.0)) {
-
-					zValsBuf[0] = genPt->_zxCordHis[i];
-					zValsBuf[1] = genPt->_zxCordLos[i + 1];
-					zValsBuf[2] = genPt->_zyCordHis[i + 2];
-					zValsBuf[3] = genPt->_zyCordLos[i + 3];
-
-					double escapeVel = 0.0;
-
-					workVals->SaveWorkValues(genPt->_resultIndexes[i], genPt->_cnt[i], escapeVel, zValsBuf, true);
-					morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
-					if (morePts) {
-						qp cY = m_YPoints[startY + curCoordIndex.Y()];
-						qp cX = m_XPoints[startX + curCoordIndex.X()];
-
-						qp zX = qp(zValsBuf[0], zValsBuf[1]);
-						qp zY = qp(zValsBuf[2], zValsBuf[3]);
-
-						genPt->SetC(i, curCoordIndex, cX, cY, zX, zY);
-
-						complete = false;
-					}
-					else {
-						genPt->SetEmpty(i);
-					}
-				}
-				else {
-					genPt->_cnt[i]++;
-					if (genPt->_cnt[i] == m_targetIterationCount) {
-
-						zValsBuf[0] = genPt->_zxCordHis[i];
-						zValsBuf[1] = genPt->_zxCordLos[i + 1];
-						zValsBuf[2] = genPt->_zyCordHis[i + 2];
-						zValsBuf[3] = genPt->_zyCordLos[i + 3];
-
-						double escapeVel = 0.0;
-
-						workVals->SaveWorkValues(genPt->_resultIndexes[i], genPt->_cnt[i], escapeVel, zValsBuf, false);
+				if (genPt->_evIterationsRemaining[i] > 0) {
+					if (QpGreaterThan(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i], 256)) {
+						qp sumSqs = qp(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i]);
+						double escapVel = GetEscapeVelocity(sumSqs);
+						workVals->UpdateCntWithEV(genPt->_resultIndexes[i], escapVel);
 
 						morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
 						if (morePts) {
@@ -118,18 +95,117 @@ namespace FGen
 							qp zX = qp(zValsBuf[0], zValsBuf[1]);
 							qp zY = qp(zValsBuf[2], zValsBuf[3]);
 
-							genPt->SetC(i, curCoordIndex, cX, cY, zX, zY);
+							genPt->SetC(i, curCoordIndex, cX, cY, zX, zY, count);
+
+							haveNewEntries = true;
 							complete = false;
 						}
 						else {
 							genPt->SetEmpty(i);
+							genPtLen--;
 						}
 					}
 					else {
+						genPt->DecrementEvIterationsRemaining(i);
 						complete = false;
 					}
+					continue;
+				}
+
+				if (genPt->IsEvIterationsRemainingZero(i)) {
+
+					// The size of Z is still less than 256 after an additional 25 interations.
+					// Add 1 to the count because this point is growing very slowy.
+					workVals->UpdateCntWithEV(genPt->_resultIndexes[i], 1);
+					
+					morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
+					if (morePts) {
+						qp cY = m_YPoints[startY + curCoordIndex.Y()];
+						qp cX = m_XPoints[startX + curCoordIndex.X()];
+
+						qp zX = qp(zValsBuf[0], zValsBuf[1]);
+						qp zY = qp(zValsBuf[2], zValsBuf[3]);
+
+						genPt->SetC(i, curCoordIndex, cX, cY, zX, zY, count);
+
+						complete = false;
+					}
+					else {
+						genPt->SetEmpty(i);
+						genPtLen--;
+					}
+					continue;
+				}
+
+				if (QpGreaterThan(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i], 4)) {
+
+					zValsBuf[0] = genPt->_zxCordHis[i];
+					zValsBuf[1] = genPt->_zxCordLos[i];
+					zValsBuf[2] = genPt->_zyCordHis[i];
+					zValsBuf[3] = genPt->_zyCordLos[i];
+
+					workVals->SaveWorkValues(genPt->_resultIndexes[i], genPt->_cnt[i], zValsBuf, true);
+					genPt->SetEvIterationsRemaining(i, 25);
+					complete = false;
+
+					//qp sumSqs = qp(genPt->_sumSqsHis[i], genPt->_sumSqsLos[i]);
+					//double escapVel = GetEscapeVelocity(sumSqs);
+					//workVals->UpdateCntWithEV(genPt->_resultIndexes[i], escapVel);
+
+					//morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
+					//if (morePts) {
+					//	qp cY = m_YPoints[startY + curCoordIndex.Y()];
+					//	qp cX = m_XPoints[startX + curCoordIndex.X()];
+
+					//	qp zX = qp(zValsBuf[0], zValsBuf[1]);
+					//	qp zY = qp(zValsBuf[2], zValsBuf[3]);
+
+					//	genPt->SetC(i, curCoordIndex, cX, cY, zX, zY, count);
+
+					//	haveNewEntries = true;
+					//	complete = false;
+					//}
+					//else {
+					//	genPt->SetEmpty(i);
+					//}
+					continue;
+				}
+
+				genPt->_cnt[i]++;
+				if (genPt->_cnt[i] == m_targetIterationCount) {
+
+					zValsBuf[0] = genPt->_zxCordHis[i];
+					zValsBuf[1] = genPt->_zxCordLos[i];
+					zValsBuf[2] = genPt->_zyCordHis[i];
+					zValsBuf[3] = genPt->_zyCordLos[i];
+
+					workVals->SaveWorkValues(genPt->_resultIndexes[i], genPt->_cnt[i], zValsBuf, false);
+
+					morePts = workVals->GetNextWorkValues(curCoordIndex, count, zValsBuf);
+					if (morePts) {
+						qp cY = m_YPoints[startY + curCoordIndex.Y()];
+						qp cX = m_XPoints[startX + curCoordIndex.X()];
+
+						qp zX = qp(zValsBuf[0], zValsBuf[1]);
+						qp zY = qp(zValsBuf[2], zValsBuf[3]);
+
+						genPt->SetC(i, curCoordIndex, cX, cY, zX, zY, count);
+						haveNewEntries = true;
+						complete = false;
+					}
+					else {
+						genPt->SetEmpty(i);
+						genPtLen--;
+					}
+				}
+				else {
+					complete = false;
 				}
 			}
+		}
+		
+		if (nullPtIterationOps > 0) {
+			std::cout << "Executed " << nullPtIterationOps << " null pt iterations.";
 		}
 
 		delete fgenCalc;
@@ -288,32 +364,33 @@ namespace FGen
 	//	return escapeVelocity;
 	//}
 
-	double Generator::GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared) {
+	double Generator::GetEscapeVelocity(qp sumSqs)
+	{
+		double evd = sumSqs.toDouble();
 
-		//int cntr;
-		//for (cntr = 0; cntr < 2; cntr++) {
-		//	zY = 2 * zX * zY + cY;
-		//	zX = xSquared - ySquared + cX;
-		//	xSquared = zX * zX;
-		//	ySquared = zY * zY;
-		//}
+		double modulus = std::log10(evd) / 2;
+	    double nu = std::log10(modulus / m_Log2) / m_Log2;
+		nu /= 4;
 
-		//qp ev = xSquared + ySquared;
-		//double evd = ev.toDouble();
+		if (nu > 1) {
+			std::cout << "Nu has a value of " << nu << ", using 1 instead.";
+			nu = 1;
+		}
 
-		//double modulus = std::log10(evd) / 2;
-	 //   double nu = std::log10(modulus / m_Log2) / m_Log2;
-		//nu /= 4;
-
-		//if (nu > 1) {
-		//	std::cout << "Nu has a value of " << nu << ", using 1 instead.";
-		//	nu = 1;
-		//}
-
-	 //   double result = 1 - nu;
-		double result = 0.0;
+		 double result = 1 - nu;
+		//double result = 0.0;
 	    return result;
 	}
+
+	//// sqrt of inner term removed using log simplification rules.
+	//log_zn = log(x*x + y * y) / 2
+	//	nu = log(log_zn / log(2)) / log(2)
+	//	// Rearranging the potential function.
+	//	// Dividing log_zn by log(2) instead of log(N = 1<<8)
+	//	// because we want the entire palette to range from the
+	//	// center to radius 2, NOT our bailout radius.
+	//	iteration = iteration + 1 - nu
+	//}
 
 	qp* Generator::GetXPoints()
 	{

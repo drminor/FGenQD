@@ -67,7 +67,7 @@ namespace FGen
 		////bool GetNextWorkIndex(PointInt &cur, bool &morePts, unsigned int * counts, bool * doneFlags);
 		//PointInt GetNextCoordIndex(PointInt cur, bool &morePts);
 
-		double GetEscapeVelocity(qp cX, qp cY, qp zX, qp zY, qp xSquared, qp ySquared);
+		double GetEscapeVelocity(qp sumSqs);
 		PointDd GetPointDd(double * zValues);
 		void PointDdToDoubleArray(PointDd z, double * zValues);
 

@@ -16,10 +16,14 @@ namespace FGen
 
 		~GenPt();
 
-		void SetC(int index, PointInt resultIndex, qp cx, qp cy, qp zx, qp zy);
+		void SetC(int index, PointInt resultIndex, qp cx, qp cy, qp zx, qp zy, unsigned int cnt);
 		void Clear(int index);
 		void SetEmpty(int index);
 		bool IsEmpty(int index);
+
+		bool IsEvIterationsRemainingZero(int index);
+		void SetEvIterationsRemaining(int index, int val);
+		int DecrementEvIterationsRemaining(int index);
 
 		int _blockWidth;
 
@@ -47,6 +51,8 @@ namespace FGen
 
 		double * _rCordHis;
 		double * _rCordLos;
+
+		int * _evIterationsRemaining;
 
 	};
 
